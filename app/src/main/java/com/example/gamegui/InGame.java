@@ -22,11 +22,9 @@ public class InGame extends AppCompatActivity {
     int nrondas = 0;
 
 
-    List<String> cartaslist = Arrays.asList("corazones_10","corazones_5","corazones_7","corazones_8","corazones_9",
-            "corazones_as","corazones_k","corazones_q","diamantes_10","diamantes_5","diamantes_7","diamantes_9",
-            "diamantes_as","diamantes_k", "diamantes_q","picas_10","picas_5","picas_7","picas_8","picas_9","picas_as",
-            "picas_k","picas_q","treboles_5","treboles_7","treboles_8","treboles_9","treboles_as","treboles_k",
-            "treboles_q"
+    List<String> cartaslist = Arrays.asList("10C","10D","10H","10S","5C","5D","5H","5S","6C","6D","6H","6S","7C","7D","7H","7S",
+            "8C","8D","8H","8S","9C","9D","9H","9S","10C","10D","10H","10S","AC","AD","AH","AS","JC","JD","JH","JS","QC","QD","QH","QS",
+            "KC","KD","KH","KS"
     );
 
 
@@ -116,28 +114,34 @@ public class InGame extends AppCompatActivity {
                 int i=0;
                 ImageView aux = (ImageView) findViewById(R.id.tablecard1);
                 functions.enseñar_carta(aux,card1);
+                for(i=0;i<jugadores.size();i++){
+                    jugadores.get(i).newCartaMesa(card1);
+                }
 
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
+                cartasenbaraja.remove(index);
 
                 aux = (ImageView) findViewById(R.id.burned);
                 functions.enseñar_carta(aux,"reverso");
-                cartasenbaraja.remove(index);
+
                 aux = (ImageView) findViewById(R.id.tablecard2);
                 functions.enseñar_carta(aux,card1);
                 for(i=0;i<jugadores.size();i++){
                     jugadores.get(i).newCartaMesa(card1);
                 }
+                cartasenbaraja.remove(index);
+
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
-                cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard3);
                 functions.enseñar_carta(aux,card1);
                 for(i=0;i<jugadores.size();i++){
                     jugadores.get(i).newCartaMesa(card1);
                 }
+                cartasenbaraja.remove(index);
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
-                auxText.setText(Integer.toString(cartasenbaraja.size()+2));
+                auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("1");
                 auxText.setVisibility(View.VISIBLE);
@@ -152,7 +156,7 @@ public class InGame extends AppCompatActivity {
                 }
                 cartasenbaraja.remove(index);
                 auxText = (TextView) findViewById(R.id.cartasendeck);
-                auxText.setText(Integer.toString(cartasenbaraja.size()+1 ));
+                auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("2");
                 i=0;
@@ -186,10 +190,12 @@ public class InGame extends AppCompatActivity {
                     functions.enseñar_carta((ImageView)findViewById(R.id.player3card2),jugadores.get(2).getcard2());
 
                 }
+            case 5:
+                jugadores.get(0).getPuntos();
+
              default:
                  System.out.println(nrondas);
         }
-
     }
 
     protected void empezar(){

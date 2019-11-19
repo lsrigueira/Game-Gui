@@ -23,96 +23,168 @@ public class functions {
                 case "reverso":
                     image.setImageResource(R.drawable.reverso);
                     break;
-                case "corazones_10":
-                image.setImageResource(R.drawable.corazones_10);
+                case "AS":
+                    image.setImageResource(R.drawable.a);
                     break;
-                case "corazones_5":
-                    image.setImageResource(R.drawable.corazones_5);
+                case "KS":
+                    image.setImageResource(R.drawable.sk);
                     break;
-                case "corazones_7":
-                    image.setImageResource(R.drawable.corazones_7);
+                case "QS":
+                    image.setImageResource(R.drawable.sq);
                     break;
-                case "corazones_8":
-                    image.setImageResource(R.drawable.corazones_8);
+                case "JS":
+                    image.setImageResource(R.drawable.sj);
                     break;
-                case "corazones_9":
-                    image.setImageResource(R.drawable.corazones_9);
+                case "10S":
+                    image.setImageResource(R.drawable.s10);
                     break;
-                case "corazones_as":
-                    image.setImageResource(R.drawable.corazones_as);
+                case "9S":
+                    image.setImageResource(R.drawable.s9);
                     break;
-                case "corazones_k":
-                    image.setImageResource(R.drawable.corazones_k);
+                case "8S":
+                    image.setImageResource(R.drawable.s8);
                     break;
-                case "corazones_q":
-                    image.setImageResource(R.drawable.corazones_q);
+                case "7S":
+                    image.setImageResource(R.drawable.s7);
                     break;
-                case "diamantes_10":
-                    image.setImageResource(R.drawable.diamantes_10);
+                case "6S":
+                    image.setImageResource(R.drawable.s6);
                     break;
-                case "diamantes_5":
-                    image.setImageResource(R.drawable.diamantes_5);
+                case "5S":
+                    image.setImageResource(R.drawable.s5);
                     break;
-                case "diamantes_7":
-                    image.setImageResource(R.drawable.diamantes_7);
+                case "4S":
+                    image.setImageResource(R.drawable.s4);
                     break;
-                case "diamantes_8":
-                    image.setImageResource(R.drawable.diamantes_8);
+                case "3s":
+                    image.setImageResource(R.drawable.s3);
                     break;
-                case "diamantes_9":
-                    image.setImageResource(R.drawable.diamantes_9);
+                case "2S":
+                    image.setImageResource(R.drawable.s2);
                     break;
-                case "diamantes_as":
-                    image.setImageResource(R.drawable.diamantes_as);
+                case "AC":
+                    image.setImageResource(R.drawable.ca);
                     break;
-                case "diamantes_k":
-                    image.setImageResource(R.drawable.diamantes_k);
+                case "CS":
+                    image.setImageResource(R.drawable.ck);
                     break;
-                case "diamantes_q":
-                    image.setImageResource(R.drawable.diamantes_q);
+                case "QC":
+                    image.setImageResource(R.drawable.cq);
                     break;
-                case "picas_10":
-                    image.setImageResource(R.drawable.picas_10);
+                case "JC":
+                    image.setImageResource(R.drawable.cj);
                     break;
-                case "picas_7":
-                    image.setImageResource(R.drawable.picas_7);
+                case "10C":
+                    image.setImageResource(R.drawable.c10);
                     break;
-                case "picas_8":
-                    image.setImageResource(R.drawable.picas_8);
+                case "9C":
+                    image.setImageResource(R.drawable.c9);
                     break;
-                case "picas_9":
-                    image.setImageResource(R.drawable.picas_9);
+                case "8C":
+                    image.setImageResource(R.drawable.c8);
                     break;
-                case "picas_as":
-                    image.setImageResource(R.drawable.picas_as);
+                case "7C":
+                    image.setImageResource(R.drawable.c7);
                     break;
-                case "picas_k":
-                    image.setImageResource(R.drawable.picas_k);
+                case "6C":
+                    image.setImageResource(R.drawable.c6);
                     break;
-                case "picas_q":
-                    image.setImageResource(R.drawable.picas_q);
+                case "5C":
+                    image.setImageResource(R.drawable.c5);
                     break;
-                case "treboles_5":
-                    image.setImageResource(R.drawable.treboles_5);
+                case "4C":
+                    image.setImageResource(R.drawable.c4);
                     break;
-                case "treboles_7":
-                    image.setImageResource(R.drawable.treboles_7);
+                case "3C":
+                    image.setImageResource(R.drawable.c3);
                     break;
-                case "treboles_8":
-                    image.setImageResource(R.drawable.treboles_8);
+                case "2C":
+                    image.setImageResource(R.drawable.c2);
                     break;
-                case "treboles_9":
-                    image.setImageResource(R.drawable.treboles_9);
+
+
+                case "AD":
+                    image.setImageResource(R.drawable.da);
                     break;
-                case "treboles_as":
-                    image.setImageResource(R.drawable.treboles_as);
+                case "CD":
+                    image.setImageResource(R.drawable.dk);
                     break;
-                case "treboles_k":
-                    image.setImageResource(R.drawable.treboles_k);
+                case "QD":
+                    image.setImageResource(R.drawable.dq);
                     break;
-                case "treboles_q":
-                    image.setImageResource(R.drawable.treboles_q);
+                case "JD":
+                    image.setImageResource(R.drawable.dj);
                     break;
+                case "10":
+                    image.setImageResource(R.drawable.d10);
+                    break;
+                case "9D":
+                    image.setImageResource(R.drawable.d9);
+                    break;
+                case "8D":
+                    image.setImageResource(R.drawable.d8);
+                    break;
+                case "7D":
+                    image.setImageResource(R.drawable.d7);
+                    break;
+                case "6D":
+                    image.setImageResource(R.drawable.d6);
+                    break;
+                case "5D":
+                    image.setImageResource(R.drawable.d5);
+                    break;
+                case "4D":
+                    image.setImageResource(R.drawable.d4);
+                    break;
+                case "3D":
+                    image.setImageResource(R.drawable.d3);
+                    break;
+                case "2D":
+                    image.setImageResource(R.drawable.d2);
+                    break;
+
+
+                case "AH":
+                    image.setImageResource(R.drawable.ha);
+                    break;
+                case "CH":
+                    image.setImageResource(R.drawable.hk);
+                    break;
+                case "QH":
+                    image.setImageResource(R.drawable.hq);
+                    break;
+                case "JH":
+                    image.setImageResource(R.drawable.hj);
+                    break;
+                case "10H":
+                    image.setImageResource(R.drawable.h10);
+                    break;
+                case "9H":
+                    image.setImageResource(R.drawable.h9);
+                    break;
+                case "8H":
+                    image.setImageResource(R.drawable.h8);
+                    break;
+                case "7H":
+                    image.setImageResource(R.drawable.h7);
+                    break;
+                case "6H":
+                    image.setImageResource(R.drawable.h6);
+                    break;
+                case "5H":
+                    image.setImageResource(R.drawable.h5);
+                    break;
+                case "4H":
+                    image.setImageResource(R.drawable.h4);
+                    break;
+                case "3H":
+                    image.setImageResource(R.drawable.h3);
+                    break;
+                case "2H":
+                    image.setImageResource(R.drawable.d2);
+                    break;
+
+
             }
             image.setVisibility(View.VISIBLE);
 

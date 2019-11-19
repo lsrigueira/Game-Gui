@@ -59,4 +59,9 @@ public class Player {
         return this.nome;
     }
 
+    public long getPuntos() {
+        System.out.println(cartasmesa);
+        return 2;
+    }
+
 }
