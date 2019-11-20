@@ -2,27 +2,52 @@ package com.example.gamegui;
 
 import android.media.Image;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.TreeMap;
 
 public class Card {
 
     private String id;
-    private String name;
     private String suit;
     private String rank;
 
-    public Card(String id){
+    public Card(String id) {
 
         this.id = id;
 
-        if(id.length() == 2) {
+        if (id.length() == 2) {
             this.suit = String.valueOf(id.charAt(1));
             this.rank = String.valueOf(id.charAt(0));
-        }
-        else if(id.length() == 3) {
+        } else if (id.length() == 3) {
             this.suit = String.valueOf(id.charAt(2));
-            this.rank = id.substring(0,1);
+            this.rank = id.substring(0, 1);
         }
+
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return this.toString(); //Kept for backwards compatibility
+    }
+
+    public String getSuit() {
+
+        return suit;
+    }
+
+    public String getRank() {
+
+        return rank;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
 
         String rank_name = "";
         String suit_name = "";
@@ -83,22 +108,37 @@ public class Card {
                 break;
         }
 
-        this.name = suit_name + " of " + rank_name;
+        return suit_name + " of " + rank_name;
+
+    }
+    
+    public boolean equals(Card other) {
+        return this.id.equals(other.id);
     }
 
-    public String getId() {
-        return id;
+    public boolean equalSuit(Card other) {
+        return this.suit.equals(other.suit);
     }
 
-    public String getName() {
-        return name;
+    public int compareRank(Card other){
+        return new Integer(this.getRankValue()).compareTo(new Integer(other.getRankValue())) ;
     }
 
-    public String getSuit() {
-        return suit;
+    public static boolean hasPair(Card[] cards) {
+        return true; //TODO
     }
 
-    public String getRank() {
-        return rank;
+    public int getRankValue() {
+        try {
+            return Integer.parseInt(this.rank);
+        } catch (NumberFormatException nfe){
+           switch (this.rank){
+               case "J": return 11;
+               case "Q": return 12;
+               case "K": return 13;
+               case "A": return 14;
+               default: return 0;
+           }
+        }
     }
 }
