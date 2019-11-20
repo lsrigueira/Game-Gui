@@ -16,9 +16,9 @@ import java.util.List;
 
 public class Player {
 
-    private String card1;
-    private String card2;
-    private ArrayList<String> cartasmesa;
+    private Card card1;
+    private Card card2;
+    private ArrayList<Card> cartasmesa;
     private int Xposition;
     private int Yposition;
     private String nome;
@@ -34,24 +34,24 @@ public class Player {
         cartasmesa= new ArrayList<>();
     }
 
-    public void setcards(String c1, String c2){
+    public void setcards(Card c1, Card c2){
         this.card1 = c1;
         this.card2 = c2;
         this.horizontal = horizontal;
     }
 
-    public void newCartaMesa(String carta){
+    public void newCartaMesa(Card carta){
         this.cartasmesa.add(carta);
     }
     public void clearCartaMesa(){
         this.cartasmesa = new ArrayList<>();
     }
 
-    public String getcard1(){
+    public Card getcard1(){
         return this.card1;
     }
 
-    public String getcard2(){
+    public Card getcard2(){
         return  this.card2;
     }
 

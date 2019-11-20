@@ -43,43 +43,43 @@ public class Card {
 
         switch (this.rank){
             case"A":
-                suit_name = "Ace";
+                rank_name = "Ace";
                 break;
             case"2":
-                suit_name = "Two";
+                rank_name = "Two";
                 break;
             case"3":
-                suit_name = "Three";
+                rank_name = "Three";
                 break;
             case"4":
-                suit_name = "Four";
+                rank_name = "Four";
                 break;
             case"5":
-                suit_name = "Five";
+                rank_name = "Five";
                 break;
             case"6":
-                suit_name = "Six";
+                rank_name = "Six";
                 break;
             case"7":
-                suit_name = "Seven";
+                rank_name = "Seven";
                 break;
             case"8":
-                suit_name = "Eight";
+                rank_name = "Eight";
                 break;
             case"9":
-                suit_name = "Nine";
+                rank_name = "Nine";
                 break;
             case"10":
-                suit_name = "Ten";
+                rank_name = "Ten";
                 break;
             case"J":
-                suit_name = "Jack";
+                rank_name = "Jack";
                 break;
             case"Q":
-                suit_name = "Queen";
+                rank_name = "Queen";
                 break;
             case"K":
-                suit_name = "King";
+                rank_name = "King";
                 break;
         }
 

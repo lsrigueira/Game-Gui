@@ -9,7 +9,7 @@
         android:layout_height="200dp"
         android:layout_width="200dp"
         android:scaleType="fitXY"
-        android:src="@drawable/corazones_5" />
+        android:src="@drawable/c5" />
 
 </LinearLayout>
 
