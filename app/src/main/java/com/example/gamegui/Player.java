@@ -18,12 +18,13 @@ public class Player {
 
     private Card card1;
     private Card card2;
-    private ArrayList<Card> cartasmesa;
+    private ArrayList<Card> cartastot;
     private int Xposition;
     private int Yposition;
     private String nome;
     private boolean horizontal;
     private int money;
+    private long puntuacion;
 
     public Player(int xpos, int ypos, boolean horizontal, String nome, int money){
         this.Xposition = xpos;
@@ -31,20 +32,41 @@ public class Player {
         this.horizontal=horizontal;
         this.nome=nome;
         this.money=money;
-        cartasmesa= new ArrayList<>();
+        cartastot= new ArrayList<>();
     }
 
     public void setcards(Card c1, Card c2){
         this.card1 = c1;
         this.card2 = c2;
+        this.cartastot.add(c1);
+        this.cartastot.add(c2);
         this.horizontal = horizontal;
     }
 
-    public void newCartaMesa(Card carta){
-        this.cartasmesa.add(carta);
+    //Pasase asi para saber nun futuro a IA de onde proveñen as cartas, se tes poker pero está na mesa hai menos prob de ganar
+    public static String hasPair(ArrayList<Card> cards) {
+
+        //Se tiveesemos duas parexas esto sería "doble parexa" e non estariamos aqui
+        for(int contador=0;contador<cards.size();contador++){
+            Card tocompare =cards.get(contador);
+            int i=0;
+            for(i=0;i<cards.size();i++){
+                   Card comparable = cards.get(i);
+                   if(comparable.getId().equals(tocompare.getId()))continue;
+                   else if(comparable.getRank().equals(tocompare.getRank())){
+                       System.out.println("ENCONTRADA PAREXA");
+                       return comparable.getRank();
+                   }
+            }
+        }
+        return "false"; //TODO
+    }
+
+    public void newCarta(Card carta){
+        this.cartastot.add(carta);
     }
     public void clearCartaMesa(){
-        this.cartasmesa = new ArrayList<>();
+        this.cartastot = new ArrayList<>();
     }
 
     public Card getcard1(){
@@ -57,6 +79,10 @@ public class Player {
 
     public String getname(){
         return this.nome;
+    }
+
+    public void calcularpuntuacion(){
+        System.out.println(hasPair(this.cartastot));
     }
 
 }

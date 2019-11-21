@@ -12,6 +12,7 @@ public class Card {
     private String id;
     private String suit;
     private String rank;
+    private String posicion;
 
     public Card(String id) {
 
@@ -25,6 +26,10 @@ public class Card {
             this.rank = id.substring(0, 1);
         }
 
+    }
+
+    public void setPosicion(String posicion) {
+        this.posicion = posicion;
     }
 
     public String getId() {
@@ -122,10 +127,6 @@ public class Card {
 
     public int compareRank(Card other){
         return new Integer(this.getRankValue()).compareTo(new Integer(other.getRankValue())) ;
-    }
-
-    public static boolean hasPair(Card[] cards) {
-        return true; //TODO
     }
 
     public int getRankValue() {

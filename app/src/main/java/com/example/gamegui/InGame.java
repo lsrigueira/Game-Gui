@@ -39,18 +39,17 @@ public class InGame extends AppCompatActivity {
         jugadores.add(persona);
 
         int i=0;
-        System.out.println(cartasenbaraja.size());
         //TODO este bucle é mais comodo cun in range
 
         for(i=0;i<jugadores.size();i++){
             int index =  (int) (Math.random()*cartasenbaraja.size());
             Card card1 = cartasenbaraja.get(index);
-            System.out.println("Nome da carta-->"+card1.getName());
+            card1.setPosicion("Mano");
             cartasenbaraja.remove(index);
             index = (int) (Math.random()*cartasenbaraja.size());
             Card card2 = cartasenbaraja.get(index);
-            System.out.println("Nome da carta2222-->"+card2.getName());
             cartasenbaraja.remove(index);
+            card2.setPosicion("Mano");
             jugadores.get(i).setcards(card1,card2);
             if(jugadores.get(i).getname().equals("person")){
                 ImageView aux = findViewById(R.id.personcard1);
@@ -96,13 +95,9 @@ public class InGame extends AppCompatActivity {
 
         int index =  (int) (Math.random()*cartasenbaraja.size());
         Card card1 = cartasenbaraja.get(index);
+        card1.setPosicion("Mesa");
         cartasenbaraja.remove(index);//Queimamos unha carta
         int contador = 0;
-        for(contador=0;contador<jugadores.size();contador++){
-            jugadores.get(contador).newCartaMesa(card1);
-        }
-
-        System.out.println(nrondas);
         switch (nrondas){
             case 1:
                 functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"reverso");
@@ -115,74 +110,98 @@ public class InGame extends AppCompatActivity {
                 findViewById(R.id.startbutton).setVisibility(View.INVISIBLE);
                 findViewById(R.id.startbutton).setEnabled(false);
                 TextView textodeck = (TextView) findViewById(R.id.cartasendeck);
-                System.out.println( cartasenbaraja.size());
                 textodeck.setText( Integer.toString(cartasenbaraja.size()) );
                 textodeck.setVisibility(View.VISIBLE);
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
-
+                contador=0;
+                for(contador=0;contador<jugadores.size();contador++){
+                    jugadores.get(contador).calcularpuntuacion();
+                }
+                System.out.println("ACABOU ESTO-->"+jugadores.size());
                 break;
             case 2:
                 int i=0;
+                //Enseñamos a primeira carta da mesa(xerada arriba)
                 ImageView aux = (ImageView) findViewById(R.id.tablecard1);
                 functions.enseñar_carta(aux,card1.getId());
-
+                for(i=0;i<jugadores.size();i++){
+                    jugadores.get(i).newCarta(card1);
+                }
+                //Queimamos unha carta
                 index = (int) (Math.random()*cartasenbaraja.size());
-                card1 = cartasenbaraja.get(index);
-
+                cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.burned);
                 functions.enseñar_carta(aux,"reverso");
+                //Collemos unha carta nova
+                index = (int) (Math.random()*cartasenbaraja.size());
+                card1 = cartasenbaraja.get(index);
+                card1.setPosicion("Mesa");
                 cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard2);
                 functions.enseñar_carta(aux,card1.getId());
                 for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCartaMesa(card1);
+                    jugadores.get(i).newCarta(card1);
                 }
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
+                card1.setPosicion("Mesa");
                 cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard3);
                 functions.enseñar_carta(aux,card1.getId());
                 for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCartaMesa(card1);
+                    jugadores.get(i).newCarta(card1);
                 }
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
-                auxText.setText(Integer.toString(cartasenbaraja.size()+2));
+                auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("1");
                 auxText.setVisibility(View.VISIBLE);
+                for(contador=0;contador<jugadores.size();contador++){
+                    jugadores.get(contador).calcularpuntuacion();
+                    System.out.println("EXECUTASE ESRTO");
+                }
                 break;
             case 3:
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
+                card1.setPosicion("Mesa");
+                cartasenbaraja.remove(index);
                 aux =  (ImageView) findViewById(R.id.tablecard4);
                 functions.enseñar_carta(aux,card1.getId());
                 for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCartaMesa(card1);
+                    jugadores.get(i).newCarta(card1);
                 }
-                cartasenbaraja.remove(index);
+
                 auxText = (TextView) findViewById(R.id.cartasendeck);
-                auxText.setText(Integer.toString(cartasenbaraja.size()+1 ));
+                auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("2");
                 i=0;
                 for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCartaMesa(card1);
+                    jugadores.get(i).calcularpuntuacion();
+                    System.out.println("EXECUTASE ESRTO");
                 }
                 break;
             case 4:
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
+                card1.setPosicion("Mesa");
+                cartasenbaraja.remove(index);
                 aux =  (ImageView) findViewById(R.id.tablecard5);
                 functions.enseñar_carta(aux,card1.getId());
                 for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCartaMesa(card1);
+                    jugadores.get(i).newCarta(card1);
                 }
-                cartasenbaraja.remove(index);
+
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size() ));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("3");
                 i=0;
+                for(contador=0;contador<jugadores.size();contador++){
+                    jugadores.get(contador).calcularpuntuacion();
+                    System.out.println("EXECUTASE ESRTO");
+                }
                 break;
             case 5:
                 i=0;
