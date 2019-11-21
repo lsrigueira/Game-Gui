@@ -48,18 +48,18 @@ public class Player {
 
         //Se tiveesemos duas parexas esto sería "doble parexa" e non estariamos aqui
         for(int contador=0;contador<cards.size();contador++){
-            Card tocompare =cards.get(contador);
-            int i=0;
+            Card tocompare = cards.get(contador);
+            int i;
             for(i=0;i<cards.size();i++){
                    Card comparable = cards.get(i);
-                   if(comparable.getId().equals(tocompare.getId()))continue;
-                   else if(comparable.getRank().equals(tocompare.getRank())){
+                   if(comparable.equals(tocompare))continue;
+                   else if(comparable.compareRank(tocompare) == 0){
                        System.out.println("ENCONTRADA PAREXA");
                        return comparable.getRank();
                    }
             }
         }
-        return "false"; //TODO
+        return null; 
     }
 
     public void newCarta(Card carta){
