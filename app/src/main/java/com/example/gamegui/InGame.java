@@ -12,52 +12,46 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
 public class InGame extends AppCompatActivity {
 
-    final ArrayList<Card> cartasenbaraja= functions.nueva_baraja();
+    ArrayList<Card> cartasenbaraja;
     final ArrayList<Player> jugadores = new ArrayList<>();
     int nrondas = 0;
+    int rondastotales=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_in_game);
-        int nronda = 0;
+        final int nronda = 0;
 
         //Creamos os xogadores
-        Player jugador1 = new Player(0,0,true,"player1",1000);
+        Player jugador1 = new Player("player1",1000);
         jugadores.add(jugador1);
-        Player jugador2 = new Player(0,0,false,"player2",1000);
+        Player jugador2 = new Player("player2",1000);
         jugadores.add(jugador2);
-        Player jugador3 = new Player(0,0,false,"player3",1000);
+        Player jugador3 = new Player("player3",1000);
         jugadores.add(jugador3);
-        Player persona = new Player(0,0,false,"person",1000);
+        Player persona = new Player("person",1000);
         jugadores.add(persona);
 
         int i=0;
-        //TODO este bucle é mais comodo cun in range
 
-        for(i=0;i<jugadores.size();i++){
-            int index =  (int) (Math.random()*cartasenbaraja.size());
-            Card card1 = cartasenbaraja.get(index);
-            card1.setPosicion("Mano");
-            cartasenbaraja.remove(index);
-            index = (int) (Math.random()*cartasenbaraja.size());
-            Card card2 = cartasenbaraja.get(index);
-            cartasenbaraja.remove(index);
-            card2.setPosicion("Mano");
-            jugadores.get(i).setcards(card1,card2);
-            if(jugadores.get(i).getname().equals("person")){
-                ImageView aux = findViewById(R.id.personcard1);
-                functions.enseñar_carta(aux,card1.getId());
-                aux = findViewById(R.id.personcard2);
-                functions.enseñar_carta(aux,card2.getId());
+        nuevamano();
+
+        Button newroundbutton = (Button) findViewById(R.id.newround);
+        newroundbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nuevamano();
             }
-        }
+        });
 
         Button startbutton = (Button) findViewById(R.id.startbutton);
         startbutton.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +79,55 @@ public class InGame extends AppCompatActivity {
 
     }
 
+    public void nuevamano(){
+        this.rondastotales++;
+        this.cartasenbaraja = functions.nueva_baraja();
+        this.nrondas =0;
+        if(this.rondastotales>1)this.nrondas++;
+        findViewById(R.id.newround).setEnabled(false);
+        findViewById(R.id.newround).setVisibility(View.INVISIBLE);
+
+        for(int i=0;i<jugadores.size();i++){
+            jugadores.get(i).clearCartaMesa();
+            int index =  (int) (Math.random()*cartasenbaraja.size());
+            Card card1 = cartasenbaraja.get(index);
+            card1.setPosicion("Mano");
+            cartasenbaraja.remove(index);
+            index = (int) (Math.random()*cartasenbaraja.size());
+            Card card2 = cartasenbaraja.get(index);
+            cartasenbaraja.remove(index);
+            card2.setPosicion("Mano");
+            jugadores.get(i).setcards(card1,card2);
+            if(jugadores.get(i).getname().equals("person")){
+                ImageView aux = findViewById(R.id.personcard1);
+                functions.enseñar_carta(aux,card1.getId());
+                aux = findViewById(R.id.personcard2);
+                functions.enseñar_carta(aux,card2.getId());
+            }
+        }
+
+        functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"reverso");
+        functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),"reverso");
+        functions.enseñar_carta((ImageView)findViewById(R.id.player2card1),"reverso");
+        functions.enseñar_carta((ImageView)findViewById(R.id.player2card2),"reverso");
+        functions.enseñar_carta((ImageView)findViewById(R.id.player3card1),"reverso");
+        functions.enseñar_carta((ImageView)findViewById(R.id.player3card2),"reverso");
+        functions.enseñar_carta((ImageView)findViewById(R.id.deck),"reverso");
+        ((TextView) findViewById(R.id.cartasendeck)).setText(String.valueOf(cartasenbaraja.size()));
+        findViewById(R.id.tablecard1).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tablecard2).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tablecard3).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tablecard4).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tablecard5).setVisibility(View.INVISIBLE);
+    }
+
+    public void refreshpoints(){
+        ((TextView) findViewById(R.id.player1Points)).setText(String.valueOf(jugadores.get(0).getMoney()));
+        ((TextView) findViewById(R.id.player2Points)).setText(String.valueOf(jugadores.get(1).getMoney()));
+        ((TextView) findViewById(R.id.player3Points)).setText(String.valueOf(jugadores.get(2).getMoney()));
+        ((TextView) findViewById(R.id.personPoints)).setText(String.valueOf(jugadores.get(3).getMoney()));
+    }
+
     public void backToMenu(){
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
@@ -100,13 +143,11 @@ public class InGame extends AppCompatActivity {
         int contador = 0;
         switch (nrondas){
             case 1:
-                functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"reverso");
-                functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),"reverso");
-                functions.enseñar_carta((ImageView)findViewById(R.id.player2card1),"reverso");
-                functions.enseñar_carta((ImageView)findViewById(R.id.player2card2),"reverso");
-                functions.enseñar_carta((ImageView)findViewById(R.id.player3card1),"reverso");
-                functions.enseñar_carta((ImageView)findViewById(R.id.player3card2),"reverso");
-                functions.enseñar_carta((ImageView)findViewById(R.id.deck),"reverso");
+                refreshpoints();
+                findViewById(R.id.player1Points).setVisibility(View.VISIBLE);
+                findViewById(R.id.player2Points).setVisibility(View.VISIBLE);
+                findViewById(R.id.player3Points).setVisibility(View.VISIBLE);
+                findViewById(R.id.personPoints).setVisibility(View.VISIBLE);
                 findViewById(R.id.startbutton).setVisibility(View.INVISIBLE);
                 findViewById(R.id.startbutton).setEnabled(false);
                 TextView textodeck = (TextView) findViewById(R.id.cartasendeck);
@@ -114,10 +155,7 @@ public class InGame extends AppCompatActivity {
                 textodeck.setVisibility(View.VISIBLE);
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador=0;
-                for(contador=0;contador<jugadores.size();contador++){
-                    jugadores.get(contador).calcularpuntuacion();
-                }
-                System.out.println("ACABOU ESTO-->"+jugadores.size());
+
                 break;
             case 2:
                 int i=0;
@@ -156,10 +194,7 @@ public class InGame extends AppCompatActivity {
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("1");
                 auxText.setVisibility(View.VISIBLE);
-                for(contador=0;contador<jugadores.size();contador++){
-                    jugadores.get(contador).calcularpuntuacion();
-                    System.out.println("EXECUTASE ESRTO");
-                }
+
                 break;
             case 3:
                 index = (int) (Math.random()*cartasenbaraja.size());
@@ -171,16 +206,11 @@ public class InGame extends AppCompatActivity {
                 for(i=0;i<jugadores.size();i++){
                     jugadores.get(i).newCarta(card1);
                 }
-
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("2");
                 i=0;
-                for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).calcularpuntuacion();
-                    System.out.println("EXECUTASE ESRTO");
-                }
                 break;
             case 4:
                 index = (int) (Math.random()*cartasenbaraja.size());
@@ -198,13 +228,17 @@ public class InGame extends AppCompatActivity {
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("3");
                 i=0;
-                for(contador=0;contador<jugadores.size();contador++){
-                    jugadores.get(contador).calcularpuntuacion();
-                    System.out.println("EXECUTASE ESRTO");
-                }
                 break;
             case 5:
                 i=0;
+                Integer [] puntuaciones= new Integer[jugadores.size()];
+                for(contador=0;contador<jugadores.size();contador++){
+                    puntuaciones[contador]=jugadores.get(contador).calcularpuntuacion();
+                }
+                int indexganador=Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
+                System.out.println("Ha ganado el jugador"+ (indexganador+1));
+                functions.cashflow(jugadores,indexganador);
+                refreshpoints();
                 for(i=0;i<jugadores.size();i++){
                     functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),jugadores.get(0).getcard1().getId());
                     functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),jugadores.get(0).getcard2().getId());
@@ -214,6 +248,8 @@ public class InGame extends AppCompatActivity {
                     functions.enseñar_carta((ImageView)findViewById(R.id.player3card2),jugadores.get(2).getcard2().getId());
 
                 }
+                findViewById(R.id.newround).setEnabled(true);
+                findViewById(R.id.newround).setVisibility(View.VISIBLE);
              default:
                  System.out.println("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS"+nrondas);
         }

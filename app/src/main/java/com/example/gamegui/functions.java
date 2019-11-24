@@ -18,7 +18,7 @@ public class functions {
 
     public static ArrayList<Card> nueva_baraja(){
         ArrayList<Card>cartasenbaraja =new ArrayList<>();
-        String[] letras = {"S","H","D","C"};
+        String[] letras = {"S","H","C","D"};//C e D
         String[] numeros= {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
         int contador1=0;
         for(contador1=0;contador1<letras.length;contador1++){
@@ -199,5 +199,26 @@ public class functions {
             image.setVisibility(View.VISIBLE);
 
     }
-
+    public static int maximo(Integer[] array){
+        int maximo=Integer.MIN_VALUE;
+        for(int contador=0;contador<array.length;contador++){
+            if(array[contador]>maximo){
+                maximo=array[contador];
+            }
+        }
+        return maximo;
+    }
+    public static void cashflow(ArrayList<Player> jugadores, int indexganador){
+        int totalmoneybet =0;
+        int monebet=0;
+        for(int contador=0;contador<jugadores.size();contador++){
+            if(contador == indexganador)continue;
+            else{
+                monebet=jugadores.get(contador).getBet();
+                jugadores.get(contador).loose(monebet);
+                totalmoneybet +=monebet;
+            }
+        }
+        jugadores.get(indexganador).win(totalmoneybet);
+    }
 }
