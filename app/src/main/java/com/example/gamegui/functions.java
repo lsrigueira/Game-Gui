@@ -1,18 +1,12 @@
 package com.example.gamegui;
 
-import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.media.Image;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.lang.reflect.Array;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+
 
 public class functions {
 
@@ -36,8 +30,11 @@ public class functions {
                 case "reverso":
                     image.setImageResource(R.drawable.reverso);
                     break;
+                case "invisible":
+                    image.setVisibility(View.INVISIBLE);
+                    break;
                 case "AS":
-                image.setImageResource(R.drawable.sa);
+                    image.setImageResource(R.drawable.sa);
                     break;
                 case "2S":
                     image.setImageResource(R.drawable.s2);
@@ -199,6 +196,24 @@ public class functions {
             image.setVisibility(View.VISIBLE);
 
     }
+
+    public static void enseñar_carta(Player x){
+        /*switch (x.getname()){
+            case "player1":
+                functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"invisible");
+                functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),"invisible");
+                break;
+            case "player2":
+                functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"invisible");
+                functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),"invisible");
+                break;
+            case "player3":
+                functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"invisible");
+                functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),"invisible");
+                break;
+        }*/
+    }
+
     public static int maximo(Integer[] array){
         int maximo=Integer.MIN_VALUE;
         for(int contador=0;contador<array.length;contador++){

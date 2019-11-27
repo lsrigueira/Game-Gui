@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 
 public class InGame extends AppCompatActivity {
@@ -30,20 +27,21 @@ public class InGame extends AppCompatActivity {
 
         setContentView(R.layout.activity_in_game);
         final int nronda = 0;
-
         //Creamos os xogadores
-        Player jugador1 = new Player("player1",1000);
+        Player jugador1 = new Player("player1",1000, ((ImageView) findViewById(R.id.player1card1)),((ImageView) findViewById(R.id.player1card2)) );
         jugadores.add(jugador1);
-        Player jugador2 = new Player("player2",1000);
+        Player jugador2 = new Player("player2",1000, ((ImageView) findViewById(R.id.player2card1)),((ImageView) findViewById(R.id.player2card2)) );
         jugadores.add(jugador2);
-        Player jugador3 = new Player("player3",1000);
+        Player jugador3 = new Player("player3",1000, ((ImageView) findViewById(R.id.player3card1)),((ImageView) findViewById(R.id.player3card2)) );
         jugadores.add(jugador3);
-        Player persona = new Player("person",1000);
+        Player persona = new Player("person",1000, ((ImageView) findViewById(R.id.personcard1)),((ImageView) findViewById(R.id.personcard2)) );
         jugadores.add(persona);
 
         int i=0;
 
         nuevamano();
+
+
 
         Button newroundbutton = (Button) findViewById(R.id.newround);
         newroundbutton.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +87,7 @@ public class InGame extends AppCompatActivity {
 
         for(int i=0;i<jugadores.size();i++){
             jugadores.get(i).clearCartaMesa();
+            jugadores.get(i).start_playing();
             int index =  (int) (Math.random()*cartasenbaraja.size());
             Card card1 = cartasenbaraja.get(index);
             card1.setPosicion("Mano");
@@ -98,6 +97,7 @@ public class InGame extends AppCompatActivity {
             cartasenbaraja.remove(index);
             card2.setPosicion("Mano");
             jugadores.get(i).setcards(card1,card2);
+            jugadores.get(i).enseñar_reverso();
             if(jugadores.get(i).getname().equals("person")){
                 ImageView aux = findViewById(R.id.personcard1);
                 functions.enseñar_carta(aux,card1.getId());
@@ -106,12 +106,6 @@ public class InGame extends AppCompatActivity {
             }
         }
 
-        functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),"reverso");
-        functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),"reverso");
-        functions.enseñar_carta((ImageView)findViewById(R.id.player2card1),"reverso");
-        functions.enseñar_carta((ImageView)findViewById(R.id.player2card2),"reverso");
-        functions.enseñar_carta((ImageView)findViewById(R.id.player3card1),"reverso");
-        functions.enseñar_carta((ImageView)findViewById(R.id.player3card2),"reverso");
         functions.enseñar_carta((ImageView)findViewById(R.id.deck),"reverso");
         ((TextView) findViewById(R.id.cartasendeck)).setText(String.valueOf(cartasenbaraja.size()));
         findViewById(R.id.tablecard1).setVisibility(View.INVISIBLE);
@@ -155,6 +149,7 @@ public class InGame extends AppCompatActivity {
                 textodeck.setVisibility(View.VISIBLE);
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador=0;
+                for(Player x:jugadores){x.getdecision(this.nrondas);}
 
                 break;
             case 2:
@@ -162,9 +157,7 @@ public class InGame extends AppCompatActivity {
                 //Enseñamos a primeira carta da mesa(xerada arriba)
                 ImageView aux = (ImageView) findViewById(R.id.tablecard1);
                 functions.enseñar_carta(aux,card1.getId());
-                for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCarta(card1);
-                }
+                for(Player x:jugadores){x.newCarta(card1);}
                 //Queimamos unha carta
                 index = (int) (Math.random()*cartasenbaraja.size());
                 cartasenbaraja.remove(index);
@@ -177,18 +170,14 @@ public class InGame extends AppCompatActivity {
                 cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard2);
                 functions.enseñar_carta(aux,card1.getId());
-                for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCarta(card1);
-                }
+                for(Player x:jugadores){x.newCarta(card1);}
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
                 cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard3);
                 functions.enseñar_carta(aux,card1.getId());
-                for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCarta(card1);
-                }
+                for(Player x:jugadores){x.newCarta(card1);x.getdecision(this.nrondas);}
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
@@ -203,9 +192,7 @@ public class InGame extends AppCompatActivity {
                 cartasenbaraja.remove(index);
                 aux =  (ImageView) findViewById(R.id.tablecard4);
                 functions.enseñar_carta(aux,card1.getId());
-                for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCarta(card1);
-                }
+                for(Player x:jugadores){x.newCarta(card1);x.getdecision(this.nrondas);}
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
@@ -219,15 +206,21 @@ public class InGame extends AppCompatActivity {
                 cartasenbaraja.remove(index);
                 aux =  (ImageView) findViewById(R.id.tablecard5);
                 functions.enseñar_carta(aux,card1.getId());
-                for(i=0;i<jugadores.size();i++){
-                    jugadores.get(i).newCarta(card1);
-                }
+                for(Player x:jugadores){
+                    x.newCarta(card1);
+                    if(x.getdecision(this.nrondas).equals("fold")){
+                       x.stop_playing();
+                       x.cartas_visibles(false);
 
+                       System.out.println("ESTO VAI GUAY");
+                    }
+                }
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size() ));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("3");
                 i=0;
+
                 break;
             case 5:
                 i=0;
@@ -239,21 +232,12 @@ public class InGame extends AppCompatActivity {
                 System.out.println("Ha ganado el jugador"+ (indexganador+1));
                 functions.cashflow(jugadores,indexganador);
                 refreshpoints();
-                for(i=0;i<jugadores.size();i++){
-                    functions.enseñar_carta((ImageView)findViewById(R.id.player1card1),jugadores.get(0).getcard1().getId());
-                    functions.enseñar_carta((ImageView)findViewById(R.id.player1card2),jugadores.get(0).getcard2().getId());
-                    functions.enseñar_carta((ImageView)findViewById(R.id.player2card1),jugadores.get(1).getcard1().getId());
-                    functions.enseñar_carta((ImageView)findViewById(R.id.player2card2),jugadores.get(1).getcard2().getId());
-                    functions.enseñar_carta((ImageView)findViewById(R.id.player3card1),jugadores.get(2).getcard1().getId());
-                    functions.enseñar_carta((ImageView)findViewById(R.id.player3card2),jugadores.get(2).getcard2().getId());
-
-                }
+                for(i=0;i<jugadores.size();i++){if(jugadores.get(i).is_playing())jugadores.get(i).enseñar_cartas();}
                 findViewById(R.id.newround).setEnabled(true);
                 findViewById(R.id.newround).setVisibility(View.VISIBLE);
              default:
                  System.out.println("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS"+nrondas);
         }
-
     }
 
 }

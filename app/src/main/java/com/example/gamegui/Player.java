@@ -1,18 +1,10 @@
 package com.example.gamegui;
 
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 
 public class Player {
     static final int pair = 1;
@@ -31,17 +23,54 @@ public class Player {
     static final int castToWorstCardInPlay = 100;
     private Card card1;
     private Card card2;
+    private ImageView imagencard1;
+    private ImageView imagencard2;
     private ArrayList<Card> cartastot;
     private String nome;
     private boolean horizontal;
     private int money;
     private int moneybet=100;
+    private boolean playing = false;
     private long puntuacion;
 
-    public Player(String nome, int money){
+    public Player(String nome, int money, ImageView imagencarta1,ImageView imagencarta2){
         this.nome=nome;
         this.money=money;
+        this.imagencard1=imagencarta1;
+        this.imagencard2=imagencarta2;
         cartastot= new ArrayList<>();
+    }
+
+    public void enseñar_reverso(){
+        functions.enseñar_carta(this.imagencard1,"reverso");
+        functions.enseñar_carta(this.imagencard2,"reverso");
+    }
+
+    public void enseñar_cartas(){
+        functions.enseñar_carta(this.imagencard1,this.card1.getId());
+        functions.enseñar_carta(this.imagencard2,this.card2.getId());
+    }
+
+    public void stop_playing(){
+        this.playing=false;
+    }
+
+    public boolean is_playing(){
+        return this.playing;
+    }
+
+    public void start_playing(){
+        this.playing=true;
+    }
+
+    public void cartas_visibles(boolean visibilidad){
+        if(visibilidad){
+            this.imagencard1.setVisibility(View.VISIBLE);
+            this.imagencard2.setVisibility(View.VISIBLE);
+        }else{
+            this.imagencard1.setVisibility(View.INVISIBLE);
+            this.imagencard2.setVisibility(View.INVISIBLE);
+        }
     }
 
     public int getMoney(){
@@ -58,6 +87,15 @@ public class Player {
 
     public void loose(int money){
         this.money -= money;
+    }
+
+    public String getdecision(int nronda){
+
+        if(nronda==4&&calcularpuntuacion()==0){
+            this.playing = false;
+            return "fold";
+        }
+        return "bet";
     }
 
     public void setcards(Card c1, Card c2){
@@ -85,7 +123,7 @@ public class Player {
                 }
             }
         }
-        return 0; //TODO
+        return 0;
     }
 
 
@@ -123,7 +161,7 @@ public class Player {
                 }
             }
         }
-        return 0; //TODO
+        return 0;
     }
 
     public int hastrio(){
@@ -198,6 +236,7 @@ public class Player {
         this.cartastot.add(carta);
     }
     public void clearCartaMesa(){
+        this.playing=true;
         this.cartastot = new ArrayList<>();
     }
 
