@@ -18,7 +18,7 @@ public class Player {
 
     private Card card1;
     private Card card2;
-    private ArrayList<Card> cartastot;
+    public ArrayList<Card> cartastot;
     private int Xposition;
     private int Yposition;
     private String nome;
@@ -26,9 +26,7 @@ public class Player {
     private int money;
     private long puntuacion;
 
-    public Player(int xpos, int ypos, boolean horizontal, String nome, int money){
-        this.Xposition = xpos;
-        this.Yposition = ypos;
+    public Player(String nome, int money){
         this.horizontal=horizontal;
         this.nome=nome;
         this.money=money;
@@ -81,8 +79,9 @@ public class Player {
         return this.nome;
     }
 
-    public void calcularpuntuacion(){
+    public int calcularpuntuacion(){
         System.out.println(hasPair(this.cartastot));
+        return 0;
     }
 
 }
