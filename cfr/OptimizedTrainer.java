@@ -315,9 +315,10 @@ class TrainerThread extends Thread {
 
 		double[] util = new double[NUM_ACTIONS];
 		double nodeUtil = 0;
+		StringBuilder nextHistory;
 		// Para cada accion (si es posible) calcular utilidad
 		for (int a = 0; a < NUM_ACTIONS; a++) {
-			StringBuilder nextHistory = new StringBuilder(history);
+			nextHistory = new StringBuilder(history);
 			switch (a) {
 			case 0:
 				if (isValidPlay(nextHistory, FOLD)) { // System.out.println(player + "---" + "f");
@@ -371,19 +372,42 @@ class TrainerThread extends Thread {
 		// Apply regret to node
 		for (int a = 0; a < NUM_ACTIONS; a++) {
 			double regret = util[a] - nodeUtil;
+			nextHistory = new StringBuilder(history);
 			// node.regretSum[a] += (player == 0 ? p1 : p0) * regret;
-			switch (player) {
+			boolean valid = false;
+			switch (a) {
 			case 0:
-				node.regretSum[a] += (p1 + p2 + p3) * regret;
+				if (isValidPlay(nextHistory, FOLD))
+					valid = true;// System.out.println(player + "---" + "f");
 				break;
 			case 1:
-				node.regretSum[a] += (p0 + p2 + p3) * regret;
+				if (isValidPlay(nextHistory, RAISE))
+					valid = true;// System.out.println(player + "---" + "r");
 				break;
 			case 2:
-				node.regretSum[a] += (p1 + p0 + p3) * regret;
+				if (isValidPlay(nextHistory, CALL))
+					valid = true;// System.out.println(player + "---" + "c");
 				break;
 			case 3:
-				node.regretSum[a] += (p1 + p2 + p0) * regret;
+				if (isValidPlay(nextHistory, CHECK)) 
+					valid = true;
+				break;
+			default:
+				System.out.println("error");
+				break;
+			}
+			switch (player) {
+			case 0:
+				if (valid)node.regretSum[a] += (p1 + p2 + p3) * regret;
+				break;
+			case 1:
+				if (valid)node.regretSum[a] += (p0 + p2 + p3) * regret;
+				break;
+			case 2:
+				if (valid)node.regretSum[a] += (p1 + p0 + p3) * regret;
+				break;
+			case 3:
+				if (valid)node.regretSum[a] += (p1 + p2 + p0) * regret;
 				break;
 			default:
 				// Esto es un error
