@@ -32,6 +32,10 @@ public class Card {
         this.posicion = posicion;
     }
 
+    public String getPosicion(){
+        return this.posicion;
+    }
+
     public String getId() {
         return id;
     }

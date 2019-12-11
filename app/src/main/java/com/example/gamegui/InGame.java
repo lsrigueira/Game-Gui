@@ -211,8 +211,6 @@ public class InGame extends AppCompatActivity {
                     if(x.getdecision(this.nrondas).equals("fold")){
                        x.stop_playing();
                        x.cartas_visibles(false);
-
-                       System.out.println("ESTO VAI GUAY");
                     }
                 }
                 auxText = (TextView) findViewById(R.id.cartasendeck);
@@ -229,14 +227,14 @@ public class InGame extends AppCompatActivity {
                     puntuaciones[contador]=jugadores.get(contador).calcularpuntuacion();
                 }
                 int indexganador=Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
-                System.out.println("Ha ganado el jugador"+ (indexganador+1));
+                functions.imprimirdebug("Ha ganado el jugador"+ (indexganador+1)+" con "+jugadores.get(indexganador).getPuntuacion()+" puntos",0);
                 functions.cashflow(jugadores,indexganador);
                 refreshpoints();
                 for(i=0;i<jugadores.size();i++){if(jugadores.get(i).is_playing())jugadores.get(i).enseñar_cartas();}
                 findViewById(R.id.newround).setEnabled(true);
                 findViewById(R.id.newround).setVisibility(View.VISIBLE);
              default:
-                 System.out.println("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS"+nrondas);
+                 functions.imprimirdebug("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS"+nrondas,2);
         }
     }
 

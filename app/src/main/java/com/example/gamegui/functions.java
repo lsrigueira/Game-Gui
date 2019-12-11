@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class functions {
 
+    static int debuglevel=1;
+
     public static ArrayList<Card> nueva_baraja(){
         ArrayList<Card>cartasenbaraja =new ArrayList<>();
         String[] letras = {"S","H","C","D"};//C e D
@@ -235,5 +237,12 @@ public class functions {
             }
         }
         jugadores.get(indexganador).win(totalmoneybet);
+    }
+
+    public static void imprimirdebug(String paraimprimir, int nivel) {
+
+        if (nivel <= debuglevel) {
+            System.out.println(paraimprimir);
+        }
     }
 }
