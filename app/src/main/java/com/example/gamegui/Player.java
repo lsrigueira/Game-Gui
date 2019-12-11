@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Player {
     static final int pair = 1;
@@ -115,8 +116,8 @@ public class Player {
             int i=0;
             for(i=0;i<cartastot.size();i++){
                 Card comparable = cartastot.get(i);
-                if(comparable.getId().equals(tocompare.getId()))continue;
-                else if(comparable.getRank().equals(tocompare.getRank())){
+                if(comparable.equals(tocompare))continue;
+                else if(comparable.compareRank(tocompare) == 0 ){
                     puntos=pair*castToBestPlay+comparable.getRankValue()*castToBestCardInPlay;;
                     System.out.println(this.getname()+":ENCONTRADA PAREXA-->"+puntos);
                     return puntos;
@@ -136,8 +137,9 @@ public class Player {
             int i=0;
             for(i=0;i<cartastot.size();i++){
                 Card comparable = cartastot.get(i);//Cambiamnos ese if para evitar falsas dobles parexas
-                if(comparable.getId().equals(tocompare.getId()) || comparable.getRankValue()== firstpairnumber )  continue;
-                else if(comparable.getRank().equals(tocompare.getRank())){
+                if (comparable.equals(tocompare) || comparable.getRankValue() == firstpairnumber)
+                    continue;
+                else if(comparable.compareRank(tocompare) == 0){
                     if(firstpairnumber == 0){
                         firstpairnumber=comparable.getRankValue();
                     }else {
@@ -229,6 +231,31 @@ public class Player {
             }
         }
         return 0;
+    }
+
+    public static boolean hasStraight(ArrayList<Card> cards)
+    {
+        if (cards.size() < 5) return false;
+
+        for (Card card : cards)
+        {
+            for(int i = 1; i < 5; i++)
+            { /**
+             * Si hai straight, algunha das cartas debe ser a máis pequena das 5
+             * si "card" é a máis pequena, podemos encontrar na lista 4 cartas dos "rank" consecutivos
+             */
+                int nextRank = (card.getRankValue() + i != 13) ? card.getRankValue() + i: 1;
+                if(i != 0 && nextRank == 1) break; //Si non estamos na primeira iteración, non vale o straight porque deu volta por arriba
+                boolean foundNext = false;
+                for (Card card1 : cards)
+                {
+                    if (card1.getRankValue() == nextRank) foundNext = true;
+                }
+                if(!foundNext) break; /*Si non encontramos a siguiente, salimos*/
+                else if(i == 4) return true; /*Si iteramos 4 veces, hai flush*/
+            }
+        }
+        return false; /*Si agotamos as posibilidades, non hai flush*/
     }
 
 

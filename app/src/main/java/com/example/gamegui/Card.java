@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collections;
 
-public class Card {
+public class Card implements Comparable{
 
     private String id;
     private String suit;
@@ -129,6 +131,11 @@ public class Card {
         return new Integer(this.getRankValue()).compareTo(new Integer(other.getRankValue())) ;
     }
 
+    public int compareTo(Object o)
+    {
+        return this.compareRank((Card) o);
+    }
+
     public int getRankValue() {
         try {
             return Integer.parseInt(this.rank);
@@ -142,4 +149,11 @@ public class Card {
            }
         }
     }
+
+    public static void sortByRank(ArrayList<Card> cards)
+    {
+        Collections.sort(cards);
+        return;
+    }
+
 }
