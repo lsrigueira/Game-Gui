@@ -13,23 +13,29 @@ public class Card {
     private String suit;
     private String rank;
     private String posicion;
+    private boolean used;
 
     public Card(String id) {
-
         this.id = id;
-
         if (id.length() == 2) {
             this.suit = String.valueOf(id.charAt(1));
             this.rank = String.valueOf(id.charAt(0));
         } else if (id.length() == 3) {
             this.suit = String.valueOf(id.charAt(2));
-            this.rank = id.substring(0, 1);
+            this.rank = id.substring(0, 2);
         }
+    }
 
+    public void setUsed(boolean x){
+        this.used = x;
     }
 
     public void setPosicion(String posicion) {
         this.posicion = posicion;
+    }
+
+    public boolean getUsed(){
+        return this.used;
     }
 
     public String getPosicion(){
@@ -117,7 +123,7 @@ public class Card {
                 break;
         }
 
-        return suit_name + " of " + rank_name;
+        return rank_name + " of " + suit_name;
 
     }
     

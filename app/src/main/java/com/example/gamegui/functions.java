@@ -1,6 +1,5 @@
 package com.example.gamegui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,11 +9,11 @@ import java.util.ArrayList;
 
 public class functions {
 
-    static int debuglevel=1;
+    static int DEBUGLEVEL =1;
 
     public static ArrayList<Card> nueva_baraja(){
         ArrayList<Card>cartasenbaraja =new ArrayList<>();
-        String[] letras = {"S","H","C","D"};//C e D
+        String[] letras = {"S","H","C","D"};
         String[] numeros= {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
         int contador1=0;
         for(contador1=0;contador1<letras.length;contador1++){
@@ -241,7 +240,7 @@ public class functions {
 
     public static void imprimirdebug(String paraimprimir, int nivel) {
 
-        if (nivel <= debuglevel) {
+        if (nivel <= DEBUGLEVEL) {
             System.out.println(paraimprimir);
         }
     }

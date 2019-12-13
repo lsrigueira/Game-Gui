@@ -21,6 +21,7 @@ public class Player {
     static final int CASTTOBESTPLAY = 1000000;
     static final int CASTTOBESTCARDINPLAY = 10000;
     static final int CASTTOWORSTCARDINPLAY = 100;
+    static final int CASTTOBESTCARDOUTPLAY =1;
     private Card card1;
     private Card card2;
     private ImageView imagencard1;
@@ -55,10 +56,10 @@ public class Player {
 
     public String getdecision(int nronda){
 
-        if(nronda==4&&calcularpuntuacion()==0){
+        /*if(nronda==4&&calcularpuntuacion()==0){
             this.playing = false;
             return "fold";
-        }
+        }*/
         return "bet";
     }
 
@@ -126,7 +127,22 @@ public class Player {
         this.horizontal = horizontal;
     }
 
-    //Pasase asi para saber nun futuro a IA de onde proveñen as cartas, se tes POKER pero está na mesa hai menos prob de ganar
+    public int bestcard(boolean completo){
+        ArrayList<Card> cartas = new ArrayList<>();
+        int bestcard = 0;
+        if(completo){
+            cartas.addAll(cartastot);
+        }else{
+            cartas.addAll(cartasmesa);
+        }
+        for(int contador=0;contador<cartas.size();contador++){
+            if(!cartas.get(contador).getUsed()){
+                if(cartas.get(contador).getRankValue() > bestcard){bestcard=cartas.get(contador).getRankValue();}
+            }
+        }
+        return bestcard;
+    }
+
     public int hasPair(boolean completo) {
         ArrayList<Card> cartas = new ArrayList<>();
         if(completo){
@@ -206,7 +222,6 @@ public class Player {
         }else{
             cartas.addAll(cartasmesa);
         }
-
 
         boolean foundbefore;
         int puntos =0;
@@ -295,6 +310,8 @@ public class Player {
         if(carta.getPosicion().equals("Mesa")){
             this.cartasmesa.add(carta);
         }
+        for(int i=0;i<cartastot.size();i++){cartastot.get(i).setUsed(false);}
+        for(int i=0;i<cartasmesa.size();i++){cartasmesa.get(i).setUsed(false);}
     }
 
     public void clearCartaMesa(){
@@ -324,19 +341,21 @@ public class Player {
         }else if( hasPair(false)!=0 ){
             puntosmesa= hasPair(false);
         }
+        int highcardmesa = bestcard(false);
+        puntosmesa = puntosmesa + highcardmesa;
         functions.imprimirdebug("CARTAS DA MESA\n"+cartasmesa +"\nAS MIÑAS CARTAS\n"+cartastot,3);
         functions.imprimirdebug("OS PUNTOS DA MESA-->"+puntosmesa,1);
-
+        functions.imprimirdebug(this.getname()+" CARTA MAIS ALTA-->"+highcardmesa,3);
         int puntos =hasflush(true);
-        if(puntos!=0){this.puntuacion = (puntos-puntosmesa); return ((int) this.puntuacion);}
+        if(puntos!=0) {this.puntuacion = (puntos-puntosmesa+bestcard(true)); return ((int) this.puntuacion);}
         puntos=haspoker(true);
-        if(puntos!=0){this.puntuacion = (puntos-puntosmesa); return ((int) this.puntuacion);}
+        if(puntos!=0){this.puntuacion = (puntos-puntosmesa+bestcard(true)); return ((int) this.puntuacion);}
         puntos=hastrio(true);
-        if(puntos!=0){this.puntuacion = (puntos-puntosmesa); return ((int) this.puntuacion);}
+        if(puntos!=0){this.puntuacion = (puntos-puntosmesa+bestcard(true)); return ((int) this.puntuacion);}
         puntos=hasDoblePair(true);
-        if(puntos !=0){this.puntuacion = (puntos-puntosmesa); return ((int) this.puntuacion);}
+        if(puntos !=0){this.puntuacion = (puntos-puntosmesa+bestcard(true)); return ((int) this.puntuacion);}
         puntos=hasPair(true);
-        if(puntos!=0){this.puntuacion = (puntos-puntosmesa); return ((int) this.puntuacion);}
+        if(puntos!=0){this.puntuacion = (puntos-puntosmesa+bestcard(true)); return ((int) this.puntuacion);}
         return 0;
 
 
