@@ -3,15 +3,21 @@ package com.example.gamegui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.icu.text.Edits;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 
 public class InGame extends AppCompatActivity {
@@ -20,21 +26,42 @@ public class InGame extends AppCompatActivity {
     final ArrayList<Player> jugadores = new ArrayList<>();
     int nrondas = 0;
     int rondastotales=0;
+    int currentPot = 0;
+    int callValue = 100;
+    int seekValue = callValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.setTitle("Poker Texas Holdem");
         setContentView(R.layout.activity_in_game);
         final int nronda = 0;
         //Creamos os xogadores
-        Player jugador1 = new Player("player1",1000, ((ImageView) findViewById(R.id.player1card1)),((ImageView) findViewById(R.id.player1card2)) );
+        Player jugador1 = new Player("player1",10000,
+                ((ImageView) findViewById(R.id.player1card1)),
+                ((ImageView) findViewById(R.id.player1card2)),
+                ((TextView) findViewById(R.id.player1Points))
+        );
         jugadores.add(jugador1);
-        Player jugador2 = new Player("player2",1000, ((ImageView) findViewById(R.id.player2card1)),((ImageView) findViewById(R.id.player2card2)) );
+
+        Player jugador2 = new Player("player2",10000,
+                ((ImageView) findViewById(R.id.player2card1)),
+                ((ImageView) findViewById(R.id.player2card2)),
+                ((TextView) findViewById(R.id.player2Points))
+        );
         jugadores.add(jugador2);
-        Player jugador3 = new Player("player3",1000, ((ImageView) findViewById(R.id.player3card1)),((ImageView) findViewById(R.id.player3card2)) );
+
+        Player jugador3 = new Player("player3", 10000,
+                ((ImageView) findViewById(R.id.player3card1)),
+                ((ImageView) findViewById(R.id.player3card2)),
+                ((TextView) findViewById(R.id.player3Points))
+        );
         jugadores.add(jugador3);
-        Player persona = new Player("person",1000, ((ImageView) findViewById(R.id.personcard1)),((ImageView) findViewById(R.id.personcard2)) );
+        final Player persona = new Player("person",10000,
+                ((ImageView) findViewById(R.id.personcard1)),
+                ((ImageView) findViewById(R.id.personcard2)),
+                ((TextView) findViewById(R.id.personPoints))
+        );
         jugadores.add(persona);
 
         int i=0;
@@ -55,15 +82,20 @@ public class InGame extends AppCompatActivity {
         startbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir();
+                repartir(null, 0);
             }
         });
+
+        final SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
+        final TextView seekBarValue = (TextView) findViewById(R.id.amount);
+        seekBar.setProgress(1);
+        seekBar.setProgress(0);
 
         Button backbutton = (Button) findViewById(R.id.BackButton);
         backbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                backToMenu();
+                finish();
             }
         });
 
@@ -71,11 +103,50 @@ public class InGame extends AppCompatActivity {
         betbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir();
+                repartir("call", seekValue);
             }
-        });;
+        });
 
+        Button foldButton = (Button) findViewById(R.id.foldButton);
+        foldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                repartir("fold", 0);
+            }
+        });
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (persona.getState() == Player.FOLD) {
+                    seekBarValue.setText("Folded");
+                    return;
+                }
+                if(persona.getMoney() < callValue){
+                    seekBarValue.setText(persona.getMoney() + " ALL IN!");
+                    return;
+                }
+                double amount_value = ((persona.getMoney() - callValue)*((Double.valueOf(progress))/100)) + callValue;
+                seekValue = Integer.valueOf((int) amount_value);
+                String amount = Integer.toString(seekValue);
+                if (progress == 100 ) amount = amount.concat(" ALL IN!");
+                else if (progress == 0) amount = amount.concat(" Call");
+                else amount = amount.concat(" Raise!");
+                seekBarValue.setText(amount);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
+
 
     public void nuevamano(){
         this.rondastotales++;
@@ -115,21 +186,26 @@ public class InGame extends AppCompatActivity {
         findViewById(R.id.tablecard5).setVisibility(View.INVISIBLE);
     }
 
+    public void setCurrentPot(int potValue) {
+        this.currentPot = potValue;
+        ((TextView) findViewById(R.id.currentPot)).setText(String.valueOf(this.currentPot));
+    }
+
+    public void addToCurrentPot(int amount){
+        this.currentPot += amount;
+        ((TextView) findViewById(R.id.currentPot)).setText(String.valueOf(this.currentPot));
+    }
+
     public void refreshpoints(){
-        ((TextView) findViewById(R.id.player1Points)).setText(String.valueOf(jugadores.get(0).getMoney()));
-        ((TextView) findViewById(R.id.player2Points)).setText(String.valueOf(jugadores.get(1).getMoney()));
-        ((TextView) findViewById(R.id.player3Points)).setText(String.valueOf(jugadores.get(2).getMoney()));
-        ((TextView) findViewById(R.id.personPoints)).setText(String.valueOf(jugadores.get(3).getMoney()));
+        Iterator<Player> i = jugadores.iterator();
+        while(i.hasNext()){
+            Player player = i.next();
+            player.getTextPuntos().setText(Integer.toString(player.getMoney()));
+        }
     }
 
-    public void backToMenu(){
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void repartir(){
+    public void repartir(String playerAction, int amount_value){
         this.nrondas++;
-
         int index =  (int) (Math.random()*cartasenbaraja.size());
         Card card1 = cartasenbaraja.get(index);
         card1.setPosicion("Mesa");
@@ -149,8 +225,9 @@ public class InGame extends AppCompatActivity {
                 textodeck.setVisibility(View.VISIBLE);
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador=0;
-                for(Player x:jugadores){x.getdecision(this.nrondas);}
-
+                for(Player x:jugadores){
+                    x.getdecision(nrondas);
+                }
                 break;
             case 2:
                 int i=0;
@@ -170,14 +247,20 @@ public class InGame extends AppCompatActivity {
                 cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard2);
                 functions.enseñar_carta(aux,card1.getId());
-                for(Player x:jugadores){x.newCarta(card1);}
+                for(Player x:jugadores){
+                    x.newCarta(card1);
+                }
                 index = (int) (Math.random()*cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
                 cartasenbaraja.remove(index);
                 aux = (ImageView) findViewById(R.id.tablecard3);
                 functions.enseñar_carta(aux,card1.getId());
-                for(Player x:jugadores){x.newCarta(card1);x.getdecision(this.nrondas);}
+                for(Player x:jugadores){
+                    x.newCarta(card1);
+                    makePlay(playerAction ,x, amount_value, nrondas);
+                }
+                refreshpoints();
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
@@ -192,7 +275,11 @@ public class InGame extends AppCompatActivity {
                 cartasenbaraja.remove(index);
                 aux =  (ImageView) findViewById(R.id.tablecard4);
                 functions.enseñar_carta(aux,card1.getId());
-                for(Player x:jugadores){x.newCarta(card1);x.getdecision(this.nrondas);}
+                for(Player x:jugadores){
+                    x.newCarta(card1);
+                    makePlay(playerAction ,x, amount_value, nrondas);
+                }
+                refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
                 auxText = (TextView) findViewById(R.id.cartasburned);
@@ -208,34 +295,75 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux,card1.getId());
                 for(Player x:jugadores){
                     x.newCarta(card1);
-                    if(x.getdecision(this.nrondas).equals("fold")){
-                       x.stop_playing();
-                       x.cartas_visibles(false);
-                    }
+                    makePlay(playerAction ,x, amount_value, nrondas);
                 }
+                refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size() ));
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("3");
                 i=0;
-
                 break;
             case 5:
                 i=0;
                 Integer [] puntuaciones= new Integer[jugadores.size()];
                 for(contador=0;contador<jugadores.size();contador++){
-                    puntuaciones[contador]=jugadores.get(contador).calcularpuntuacion();
+                    puntuaciones[contador]= (jugadores.get(contador).getState() != Player.FOLD) ?
+                            jugadores.get(contador).calcularpuntuacion() : -1;
                 }
-                int indexganador=Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
+                int indexganador = Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
                 functions.imprimirdebug("Ha ganado el jugador"+ (indexganador+1)+" con "+jugadores.get(indexganador).getPuntuacion()+" puntos",0);
-                functions.cashflow(jugadores,indexganador);
+                jugadores.get(indexganador).win(currentPot);
+                setCurrentPot(0);
+                this.callValue = 100;
+                this.seekValue = callValue;
                 refreshpoints();
-                for(i=0;i<jugadores.size();i++){if(jugadores.get(i).is_playing())jugadores.get(i).enseñar_cartas();}
+                if (jugadores.get(jugadores.size() -1).getMoney() <= 0) {
+                    Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
+                    finish();
+                }
+                Toast result = (jugadores.get(indexganador).getname() == "person") ?
+                        Toast.makeText(this.getBaseContext(), "You win, congrats!", Toast.LENGTH_SHORT) :
+                        Toast.makeText(this.getBaseContext(), "Te bañaste!", Toast.LENGTH_SHORT);
+                result.show();
+                for(i=0;i<jugadores.size();i++){
+                    Player player = jugadores.get(i);
+                    if(player.is_playing()) {
+                        player.enseñar_cartas();
+                    }
+                    if(player.getMoney() <= 0) {
+                        player.cartas_visibles(false);
+                        jugadores.remove(player);
+                    }
+                    else player.setState(Player.CALL);
+                }
                 findViewById(R.id.newround).setEnabled(true);
                 findViewById(R.id.newround).setVisibility(View.VISIBLE);
-             default:
-                 functions.imprimirdebug("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS"+nrondas,2);
+            default:
+                functions.imprimirdebug("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS"+nrondas,2);
+
         }
+        ((SeekBar) findViewById(R.id.seekBar)).setProgress(1); //Forzamos a que a barra se actualice cambiando dúas veces de valor
+        ((SeekBar) findViewById(R.id.seekBar)).setProgress(0);
     }
 
+    public void makePlay(String playerAction, Player player, int amount, int nrondas) {
+            String action = (player.getname() == "person") ? playerAction : player.getdecision(nrondas);
+            switch (action){
+                case "call":
+                    if(player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
+                    if (amount >= player.getMoney()){
+                        player.setState(Player.ALL_IN);
+                    }
+                    int loose_value = (amount >= player.getMoney()) ? player.getMoney() : amount;
+                    player.loose(loose_value);
+                    addToCurrentPot(amount);
+                    callValue = amount;
+                    break;
+                case "fold":
+                    player.setState(Player.FOLD);
+                    player.stop_playing();
+            }
+    }
 }
+

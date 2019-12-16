@@ -3,6 +3,7 @@ package com.example.gamegui;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -22,24 +23,39 @@ public class Player {
     static final int CASTTOBESTCARDINPLAY = 10000;
     static final int CASTTOWORSTCARDINPLAY = 100;
     static final int CASTTOBESTCARDOUTPLAY =1;
+
+    static final String CALL = "Call";
+    static final String RAISE = "Raise";
+    static final String FOLD = "Fold";
+    static final String ALL_IN = "All in!";
+    static final String BROKE = "Broke";
+
     private Card card1;
     private Card card2;
     private ImageView imagencard1;
     private ImageView imagencard2;
+
+    public TextView getTextPuntos() {
+        return textPuntos;
+    }
+
+    private TextView textPuntos;
     private ArrayList<Card> cartastot;
     private ArrayList<Card> cartasmesa;
     private String nome;
     private boolean horizontal;
     private int money;
     private int moneybet=100;
-    private boolean playing = false;
+    private boolean playing = true;
+    private String playState = Player.CALL;
     private long puntuacion;
 
-    public Player(String nome, int money, ImageView imagencarta1,ImageView imagencarta2){
+    public Player(String nome, int money, ImageView imagencarta1,ImageView imagencarta2, TextView textPuntos){
         this.nome=nome;
         this.money=money;
         this.imagencard1=imagencarta1;
         this.imagencard2=imagencarta2;
+        this.textPuntos = textPuntos;
         cartastot= new ArrayList<>();
         cartasmesa= new ArrayList<>();
     }
@@ -60,7 +76,7 @@ public class Player {
             this.playing = false;
             return "fold";
         }*/
-        return "bet";
+        return "call";
     }
 
     public Card getcard1(){
@@ -87,6 +103,15 @@ public class Player {
     public void enseñar_cartas(){
         functions.enseñar_carta(this.imagencard1,this.card1.getId());
         functions.enseñar_carta(this.imagencard2,this.card2.getId());
+    }
+
+    public String getState() {
+        return playState;
+    }
+
+    public String setState(String playState){
+        this.playState = playState;
+        return this.playState;
     }
 
     public void stop_playing(){
