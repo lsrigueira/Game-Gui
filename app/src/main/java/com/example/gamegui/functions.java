@@ -14,7 +14,7 @@ public class functions {
     public static ArrayList<Card> nueva_baraja(){
         ArrayList<Card>cartasenbaraja =new ArrayList<>();
         String[] letras = {"S","H","C","D"};
-        String[] numeros= {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+        String[] numeros= {"A","2","3","4","5","6"};//,"7","8","9","10","J","Q","K"};
         int contador1=0;
         for(contador1=0;contador1<letras.length;contador1++){
             int contador2 =0;

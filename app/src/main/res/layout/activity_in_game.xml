@@ -305,4 +305,48 @@
         app:layout_constraintStart_toStartOf="@+id/deck"
         app:layout_constraintTop_toBottomOf="@+id/tablecard5" />
 
+    <TextView
+        android:id="@+id/p1hand"
+        android:layout_width="103dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="12dp"
+        android:text="p1Hand"
+        app:layout_constraintBottom_toTopOf="@+id/player1card2"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/p2hand"
+        android:layout_width="85dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="p2Hand"
+        app:layout_constraintEnd_toStartOf="@+id/player2card1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/p3hand"
+        android:layout_width="112dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="p3Hand"
+        app:layout_constraintBottom_toTopOf="@+id/player3card2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/personHand"
+        android:layout_width="109dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginBottom="8dp"
+        android:text="personHand"
+        app:layout_constraintBottom_toTopOf="@+id/personcard2"
+        app:layout_constraintStart_toEndOf="@+id/personPoints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -117,9 +117,13 @@ public class InGame extends AppCompatActivity {
 
     public void refreshpoints(){
         ((TextView) findViewById(R.id.player1Points)).setText(String.valueOf(jugadores.get(0).getMoney()));
+        ((TextView) findViewById(R.id.p1hand)).setText(jugadores.get(0).getCurrentHand());
         ((TextView) findViewById(R.id.player2Points)).setText(String.valueOf(jugadores.get(1).getMoney()));
+        ((TextView) findViewById(R.id.p2hand)).setText(jugadores.get(1).getCurrentHand());
         ((TextView) findViewById(R.id.player3Points)).setText(String.valueOf(jugadores.get(2).getMoney()));
+        ((TextView) findViewById(R.id.p3hand)).setText(jugadores.get(2).getCurrentHand());
         ((TextView) findViewById(R.id.personPoints)).setText(String.valueOf(jugadores.get(3).getMoney()));
+        ((TextView) findViewById(R.id.personHand)).setText(jugadores.get(3).getCurrentHand());
     }
 
     public void backToMenu(){
@@ -228,6 +232,7 @@ public class InGame extends AppCompatActivity {
                 }
                 int indexganador=Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
                 functions.imprimirdebug("Ha ganado el jugador"+ (indexganador+1)+" con "+jugadores.get(indexganador).getPuntuacion()+" puntos",0);
+                functions.imprimirdebug("Tiempo medio de ejecucion = " + Player.tiempoEjecucion/Player.vecesEjecucion/1000 + "ms",1);
                 functions.cashflow(jugadores,indexganador);
                 refreshpoints();
                 for(i=0;i<jugadores.size();i++){if(jugadores.get(i).is_playing())jugadores.get(i).enseñar_cartas();}

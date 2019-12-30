@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
                 openPlay();
             }
         });
+
+        setTitle("Poker Texas Holdem (PSI C)");
     }
 
     public void openOptions(){
