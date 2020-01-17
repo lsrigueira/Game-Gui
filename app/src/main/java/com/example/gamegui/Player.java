@@ -430,7 +430,7 @@ public class Player {
         if (valorPareja1 * valorPareja2 > 0) {
             puntuacion = DOUBLEPAIR * CASTTOBESTPLAY + Math.max(valorPareja1, valorPareja2) * CASTTOBESTCARDINPLAY;
             functions.imprimirdebug(this.getname() + ":ENCONTRADA DOBLE PAREJA-->" + puntuacion, 1);
-            this.setCurrentHand("DOBLE PAIR");
+            this.setCurrentHand("DOUBLE PAIR");
             tiempoEjecucion += System.nanoTime() - startTime;
             vecesEjecucion++;
             puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
