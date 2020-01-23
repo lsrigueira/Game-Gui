@@ -17,6 +17,7 @@ import java.io.IOException;
 public class Options extends AppCompatActivity {
 
     MediaPlayer player = new MediaPlayer();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,6 @@ public class Options extends AppCompatActivity {
 
 
     }
-
 
 
 }

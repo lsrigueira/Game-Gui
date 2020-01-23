@@ -1,11 +1,7 @@
 package com.example.gamegui;
 
-import android.media.Image;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import java.util.TreeMap;
 
 public class Card {
 

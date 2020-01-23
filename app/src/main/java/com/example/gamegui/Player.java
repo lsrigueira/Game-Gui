@@ -4,6 +4,7 @@ package com.example.gamegui;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,43 +20,45 @@ public class Player {
     static final int STRAIGHT_FLUSH = 8;
     static final int ROYAL_FLUSH = 9;
 
-    static long tiempoEjecucion = 0;
-    static long vecesEjecucion = 0;
-
 
     static final int CASTTOBESTPLAY = 1000000;
     static final int CASTTOBESTCARDINPLAY = 10000;
     static final int CASTTOWORSTCARDINPLAY = 100;
     static final int CASTTOBESTCARDOUTPLAY = 1;
+
+    static final String CALL = "Call";
+    static final String RAISE = "Raise";
+    static final String FOLD = "Fold";
+    static final String ALL_IN = "All in!";
+    static final String BROKE = "Broke";
+
     private Card card1;
     private Card card2;
     private ImageView imagencard1;
     private ImageView imagencard2;
+
+    public TextView getTextPuntos() {
+        return textPuntos;
+    }
+
+    private TextView textPuntos;
     private ArrayList<Card> cartastot;
     private ArrayList<Card> cartasmesa;
     private String nome;
     private boolean horizontal;
     private int money;
     private int moneybet = 100;
-    private boolean playing = false;
+    private boolean playing = true;
+    private String playState = Player.CALL;
     private long puntuacion;
     private long puntuacionmesa;
 
-    public String getCurrentHand() {
-        return currentHand;
-    }
-
-    public void setCurrentHand(String currentHand) {
-        this.currentHand = currentHand;
-    }
-
-    private String currentHand = "";
-
-    public Player(String nome, int money, ImageView imagencarta1, ImageView imagencarta2) {
+    public Player(String nome, int money, ImageView imagencarta1, ImageView imagencarta2, TextView textPuntos) {
         this.nome = nome;
         this.money = money;
         this.imagencard1 = imagencarta1;
         this.imagencard2 = imagencarta2;
+        this.textPuntos = textPuntos;
         cartastot = new ArrayList<>();
         cartasmesa = new ArrayList<>();
     }
@@ -78,7 +81,7 @@ public class Player {
             this.playing = false;
             return "fold";
         }*/
-        return "bet";
+        return "call";
     }
 
     public Card getcard1() {
@@ -109,6 +112,15 @@ public class Player {
     public void enseñar_cartas() {
         functions.enseñar_carta(this.imagencard1, this.card1.getId());
         functions.enseñar_carta(this.imagencard2, this.card2.getId());
+    }
+
+    public String getState() {
+        return playState;
+    }
+
+    public String setState(String playState) {
+        this.playState = playState;
+        return this.playState;
     }
 
     public void stop_playing() {
@@ -149,14 +161,32 @@ public class Player {
         this.horizontal = horizontal;
     }
 
-    public int bestcard(boolean completo) {
-        ArrayList<Card> cartas = new ArrayList<>();
-        int bestcard = 0;
-        if (completo) {
-            cartas.addAll(cartastot);
-        } else {
-            cartas.addAll(cartasmesa);
+
+    public void newCarta(Card carta) {
+        this.cartastot.add(0, carta);
+        this.puntuacion = 0;
+        this.puntuacionmesa = 0;
+        if (carta.getPosicion().equals("Mesa")) {
+            this.cartasmesa.add(0, carta);
         }
+        for (int i = 0; i < cartastot.size(); i++) {
+            cartastot.get(i).setUsed(false);
+        }
+        for (int i = 0; i < cartasmesa.size(); i++) {
+            cartasmesa.get(i).setUsed(false);
+        }
+    }
+
+    public void clearCartaMesa() {
+        this.playing = true;
+        this.cartastot = new ArrayList<>();
+        this.cartasmesa = new ArrayList<>();
+    }
+
+
+    public int bestcard(ArrayList<Card> cartas) {
+
+        int bestcard = 0;
         for (int contador = 0; contador < cartas.size(); contador++) {
             if (!cartas.get(contador).getUsed()) {
                 if (cartas.get(contador).getRankValue() > bestcard) {
@@ -167,15 +197,13 @@ public class Player {
         return bestcard;
     }
 
-    //TODO Aqui cata mais alta da a da mesa non a do suit
+    private int hayPareja(ArrayList<Card> cartas) {
 
-    private int hayPareja() {
+        for (int nCartaA = 0; nCartaA < cartas.size(); nCartaA++) {
+            Card CartaA = cartas.get(nCartaA);
 
-        for (int nCartaA = 0; nCartaA < cartastot.size(); nCartaA++) {
-            Card CartaA = cartastot.get(nCartaA);
-
-            for (int nCartaB = 0; nCartaB < cartastot.size(); nCartaB++) {
-                Card CartaB = cartastot.get(nCartaB);
+            for (int nCartaB = 0; nCartaB < cartas.size(); nCartaB++) {
+                Card CartaB = cartas.get(nCartaB);
                 if (CartaA.getRank().equals(CartaB.getRank()) && !CartaA.getId().equals(CartaB.getId())
                         && !CartaA.getUsed() && !CartaB.getUsed()) {
 
@@ -190,27 +218,28 @@ public class Player {
         return 0;
     }
 
-    private int hayPokerOTrio() {
+    private int hayPokerOTrio(ArrayList<Card> cartas) {
 
         //Cojo una carta A y recorro todo el array
-        for (int nCartaA = 0; nCartaA < cartastot.size(); nCartaA++) {
-            Card CartaA = cartastot.get(nCartaA);
+        for (int nCartaA = 0; nCartaA < cartas.size(); nCartaA++) {
+            Card CartaA = cartas.get(nCartaA);
 
             //Si encuentro una carta B != A pero con el mismo numero, la cojo y vuelo a recorrer el array
-            for (int nCartaB = 0; nCartaB < cartastot.size(); nCartaB++) {
-                Card CartaB = cartastot.get(nCartaB);
+            for (int nCartaB = 0; nCartaB < cartas.size(); nCartaB++) {
+                Card CartaB = cartas.get(nCartaB);
                 if (CartaB.getRank().equals(CartaA.getRank()) && !CartaB.getId().equals(CartaA.getId())) {
                     //Si encuentro una carta C != B y !=A pero con el mismo numero -> TRIO
-                    for (int nCartaC = 0; nCartaC < cartastot.size(); nCartaC++) {
-                        Card CartaC = cartastot.get(nCartaC);
+                    for (int nCartaC = 0; nCartaC < cartas.size(); nCartaC++) {
+                        Card CartaC = cartas.get(nCartaC);
                         if (CartaC.getRank().equals(CartaB.getRank()) && !CartaA.getId().equals(CartaC.getId())
                                 && !CartaB.getId().equals(CartaC.getId())) {
                             //SI LLEGO AQUI HAY TRIO
-                            for (int nCartaD = 0; nCartaD < cartastot.size(); nCartaD++) {
-                                Card CartaD = cartastot.get(nCartaD);
+                            for (int nCartaD = 0; nCartaD < cartas.size(); nCartaD++) {
+                                Card CartaD = cartas.get(nCartaD);
                                 if (CartaD.getRank().equals(CartaC.getRank()) && !CartaA.getId().equals(CartaD.getId())
                                         && !CartaB.getId().equals(CartaD.getId()) && !CartaC.getId().equals(CartaD.getId())) {
 
+                                    //AQUI HAY POKER
                                     //functions.imprimirdebug("POKER CON LAS CARTAS: " + " " + CartaA.toString() + " " + CartaB.toString() + " " + CartaC.toString() + " " + CartaD.toString(), 1);
                                     int max1 = Math.max(CartaA.getRankValue(), CartaB.getRankValue());
                                     int max2 = Math.max(CartaC.getRankValue(), CartaD.getRankValue());
@@ -237,14 +266,15 @@ public class Player {
         return 0;
     }
 
-    private int hayColor() {
+    private int hayColor(ArrayList<Card> cartas) {
+
 
         Card carta;
         int[] colors = new int[4];
         int cartaMasAlta = 0;
-        for (int contador = 0; contador < cartastot.size(); contador++) {
+        for (int contador = 0; contador < cartas.size(); contador++) {
 
-            carta = cartastot.get(contador);
+            carta = cartas.get(contador);
             cartaMasAlta = carta.getRankValue() > cartaMasAlta ? carta.getRankValue() : cartaMasAlta;
             switch (carta.getSuit()) {
                 case "C":
@@ -267,33 +297,36 @@ public class Player {
         return 0;
     }
 
-    private int haiEscalera() {
+    private int haiEscalera(ArrayList<Card> cartas) {
 
-        for (int nCarta = 0; nCarta < cartastot.size(); nCarta++) {
-            Card cartaA = cartastot.get(nCarta);
+        for (int nCarta = 0; nCarta < cartas.size(); nCarta++) {
+            Card cartaA = cartas.get(nCarta);
             int numeroCartaA = cartaA.getRankValue();
             boolean uno, dos, tres, cuatro;
-            uno=dos=tres=cuatro=true;
+            uno = dos = tres = cuatro = true;
 
             int escalera = 0;
             int cartaMasAlta = 0;
 
-            for (int i = 0; i < cartastot.size(); i++) {
-                if (numeroCartaA>9){
+            for (int i = 0; i < cartas.size(); i++) {
+                if (numeroCartaA > 9) {
                     break;
                 }
-                Card cartaAux = cartastot.get(i);
+                Card cartaAux = cartas.get(i);
                 int numeroCartaAux = cartaAux.getRankValue();
                 if (uno && numeroCartaA + 1 == numeroCartaAux) {
                     escalera++;
                     uno = false;
-                }if (dos &&numeroCartaA + 2 == numeroCartaAux) {
+                }
+                if (dos && numeroCartaA + 2 == numeroCartaAux) {
                     escalera++;
                     dos = false;
-                }if (tres && numeroCartaA + 3 == numeroCartaAux) {
+                }
+                if (tres && numeroCartaA + 3 == numeroCartaAux) {
                     escalera++;
                     tres = false;
-                }if (cuatro &&numeroCartaA + 4 == numeroCartaAux) {
+                }
+                if (cuatro && numeroCartaA + 4 == numeroCartaAux) {
                     escalera++;
                     cuatro = false;
                     cartaMasAlta = numeroCartaAux;
@@ -306,27 +339,6 @@ public class Player {
         return 0;
     }
 
-    public void newCarta(Card carta) {
-        this.cartastot.add(0, carta);
-        this.puntuacion = 0;
-        this.puntuacionmesa = 0;
-        if (carta.getPosicion().equals("Mesa")) {
-            this.cartasmesa.add(0, carta);
-        }
-        for (int i = 0; i < cartastot.size(); i++) {
-            cartastot.get(i).setUsed(false);
-        }
-        for (int i = 0; i < cartasmesa.size(); i++) {
-            cartasmesa.get(i).setUsed(false);
-        }
-    }
-
-    public void clearCartaMesa() {
-        this.playing = true;
-        this.cartastot = new ArrayList<>();
-        this.cartasmesa = new ArrayList<>();
-    }
-
     /*
     A puntuacion sera un int de formato xx-yy-yy-zz onde as letras solo indican o numero de dixistos e a orixe do calculo.Explicacion:
         XX: Indica se o xogar ten parexa,doble-parexa,TRIO...
@@ -334,131 +346,86 @@ public class Player {
         ZZ: Indica a carta mais alta que non se empregou para o cálculo de XX
      */
 
-    public int calcularpuntuacion() {
-        long startTime = System.nanoTime();
+    public int calcularPuntos(ArrayList<Card> cartas) {
 
-        int puntosmesa = 0;
-        int puntos = 0;
+        int puntos, valorPoker, valorTrio, valorPareja1, valorPareja2, valorColor, valorEscalera;
 
-        int valorPoker, valorTrio = 0, valorPareja1, valorPareja2, valorColor, valorEscalera;
-
-        int highcardmesa = bestcard(false);
-        puntosmesa = puntosmesa + highcardmesa;
-        functions.imprimirdebug("CARTAS DA MESA\n" + cartasmesa + "\nAS MIÑAS CARTAS\n" + cartastot, 3);
-        functions.imprimirdebug("OS PUNTOS DA MESA-->" + puntosmesa, 1);
+        int highcardmesa = bestcard(cartas);
         functions.imprimirdebug(this.getname() + " CARTA MAIS ALTA-->" + highcardmesa, 3);
 
-        for (Card card : cartastot) {
-            card.setUsed(false);
-        }
-
-        valorPoker = hayPokerOTrio();
+        valorPoker = hayPokerOTrio(cartas);
         if (valorPoker > 0) {
-            this.puntuacion = POKER * CASTTOBESTPLAY + valorPoker * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADO POKER-->" + puntuacion, 1);
-            this.setCurrentHand("POKER");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = POKER * CASTTOBESTPLAY + valorPoker * CASTTOBESTCARDINPLAY + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADO POKER-->" + puntos, 1);
+            return puntos;
         } else if (valorPoker < 0)
             valorTrio = valorPoker * -1;
         else
             valorTrio = 0;
 
-        valorPareja1 = hayPareja();
+        valorPareja1 = hayPareja(cartas);
         if (valorTrio * valorPareja1 > 0) {
-            puntuacion = FULL_HOUSE * CASTTOBESTPLAY + Math.max(valorTrio, valorPareja1) * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADO FULL-->" + puntuacion, 1);
-            this.setCurrentHand("FULL");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = FULL_HOUSE * CASTTOBESTPLAY + Math.max(valorTrio, valorPareja1) * CASTTOBESTCARDINPLAY + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADO FULL-->" + puntos, 1);
+            return puntos;
         }
 
         //cuesta aprox 100ms
-        valorColor = hayColor();
+        valorColor = hayColor(cartas);
         if (valorColor > 0) {
-            puntuacion = FLUSH * CASTTOBESTPLAY + valorColor * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADO FLUSH-->" + puntuacion, 1);
-            this.setCurrentHand("FLUSH");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = FLUSH * CASTTOBESTPLAY + valorColor * CASTTOBESTCARDINPLAY + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADO FLUSH-->" + puntos, 1);
+            return puntos;
         }
 
         //cuesta aprox 100ms
-        valorEscalera = haiEscalera();
+        valorEscalera = haiEscalera(cartas);
         if (valorEscalera > 0) {
-            puntuacion = STRAIGHT * CASTTOBESTPLAY + valorEscalera * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADO STRAIGHT-->" + puntuacion, 1);
-            this.setCurrentHand("STRAIGHT");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = STRAIGHT * CASTTOBESTPLAY + valorEscalera * CASTTOBESTCARDINPLAY + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADO STRAIGHT-->" + puntos, 1);
+            return puntos;
         }
 
         if (valorTrio > 0) {
-            puntuacion = TRIO * CASTTOBESTPLAY + valorTrio * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADO TRIO-->" + puntuacion, 1);
-            this.setCurrentHand("TRIO");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = TRIO * CASTTOBESTPLAY + valorTrio * CASTTOBESTCARDINPLAY + highcardmesa + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADO TRIO-->" + puntos, 1);
+            return puntos;
         }
 
-        valorPareja2 = hayPareja();
+        valorPareja2 = hayPareja(cartas);
         if (valorPareja1 * valorPareja2 > 0) {
-            puntuacion = DOUBLEPAIR * CASTTOBESTPLAY + Math.max(valorPareja1, valorPareja2) * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADA DOBLE PAREJA-->" + puntuacion, 1);
-            this.setCurrentHand("DOUBLE PAIR");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = DOUBLEPAIR * CASTTOBESTPLAY + Math.max(valorPareja1, valorPareja2) * CASTTOBESTCARDINPLAY + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADA DOBLE PAREJA-->" + puntos, 1);
+            return puntos;
         }
 
         if (valorPareja1 > 0) {
-            puntuacion = PAIR * CASTTOBESTPLAY + valorPareja1 * CASTTOBESTCARDINPLAY;
-            functions.imprimirdebug(this.getname() + ":ENCONTRADA PAREJA-->" + puntuacion, 1);
-            this.setCurrentHand("PAIR");
-            tiempoEjecucion += System.nanoTime() - startTime;
-            vecesEjecucion++;
-            puntos = ((int) this.puntuacion) - ((int)this.puntuacionmesa);
-            if(puntos!=0) {
-                this.puntuacion = (puntos-puntosmesa+bestcard(true));
-                return ((int) this.puntuacion);
-            }
+            puntos = PAIR * CASTTOBESTPLAY + valorPareja1 * CASTTOBESTCARDINPLAY + highcardmesa;
+            functions.imprimirdebug(this.getname() + ":ENCONTRADA PAREJA-->" + puntos, 1);
+            return puntos;
         }
 
-        tiempoEjecucion += System.nanoTime() - startTime;
-        vecesEjecucion++;
-        this.setCurrentHand("F");
-        return 0;
+        puntos = highcardmesa;
+        functions.imprimirdebug(this.getname() + ":ENCONTRADO SOLO CARTA ALTA-->" + puntos, 1);
+        return puntos;
+    }
 
+    public int calcularpuntuacion() {
 
+        ArrayList<Card> cartasTotales = new ArrayList<>();
+        ArrayList<Card> cartasMesa = new ArrayList<>();
+        cartasTotales.addAll(cartastot);
+        cartasMesa.addAll(cartasmesa);
+
+        int puntosjugador = calcularPuntos(cartasTotales);
+        int puntuacionmesa = calcularPuntos(cartasMesa);
+
+        functions.imprimirdebug("CARTAS DA MESA\n" + cartasmesa + "\nAS MIÑAS CARTAS\n" + cartastot, 3);
+        functions.imprimirdebug("OS PUNTOS NA MAN-->" + puntosjugador, 1);
+        functions.imprimirdebug("OS PUNTOS DA MESA-->" + puntuacionmesa, 1);
+        functions.imprimirdebug("PUNTOS RESULTANTES-->" + (puntosjugador - puntuacionmesa), 1);
+
+        return (puntosjugador - puntuacionmesa);
     }
 
 }

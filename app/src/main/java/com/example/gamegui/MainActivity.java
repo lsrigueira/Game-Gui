@@ -29,17 +29,15 @@ public class MainActivity extends AppCompatActivity {
                 openPlay();
             }
         });
-
-        setTitle("Poker Texas Holdem (PSI C)");
     }
 
-    public void openOptions(){
-        Intent intent = new Intent(this,Options.class);
+    public void openOptions() {
+        Intent intent = new Intent(this, Options.class);
         startActivity(intent);
     }
 
-    public void openPlay(){
-        Intent intent = new Intent(this,InGame.class);
+    public void openPlay() {
+        Intent intent = new Intent(this, InGame.class);
         startActivity(intent);
     }
 

@@ -8,11 +8,10 @@
 
     <TextView
         android:id="@+id/personPoints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="69dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:width="100dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/BackButton"
@@ -64,9 +63,9 @@
         android:id="@+id/burned"
         android:layout_width="80dp"
         android:layout_height="100dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginLeft="92dp"
+        android:layout_marginBottom="28dp"
         android:src="@drawable/reverso"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
@@ -179,32 +178,36 @@
     <Button
         android:id="@+id/betbutton"
         android:layout_width="82dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="88dp"
         android:text="BET"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.964"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/personcard2" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="82dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="16dp"
-        android:text="Check"
+        android:id="@+id/foldButton"
+        android:layout_width="77dp"
+        android:layout_height="88dp"
+        android:text="Fold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/betbutton"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toEndOf="@+id/personcard2" />
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="164dp"
-        android:layout_height="19dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/betbutton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_width="315dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/personcard2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toEndOf="@+id/personPoints" />
 
     <Button
         android:id="@+id/BackButton"
@@ -274,25 +277,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:width="100dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/burned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player3card1"
-        app:layout_constraintVertical_bias="0.484" />
+        app:layout_constraintVertical_bias="0.222" />
 
     <TextView
         android:id="@+id/player1Points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
         android:width="100dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/deck"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player1card1" />
+        app:layout_constraintTop_toBottomOf="@+id/player1card1"
+        app:layout_constraintVertical_bias="0.229" />
 
     <Button
         android:id="@+id/newround"
@@ -306,47 +312,40 @@
         app:layout_constraintTop_toBottomOf="@+id/tablecard5" />
 
     <TextView
-        android:id="@+id/p1hand"
-        android:layout_width="103dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="12dp"
-        android:text="p1Hand"
-        app:layout_constraintBottom_toTopOf="@+id/player1card2"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/p2hand"
-        android:layout_width="85dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="p2Hand"
-        app:layout_constraintEnd_toStartOf="@+id/player2card1"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/p3hand"
-        android:layout_width="112dp"
-        android:layout_height="18dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="8dp"
-        android:text="p3Hand"
-        app:layout_constraintBottom_toTopOf="@+id/player3card2"
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="140dp"
+        android:layout_marginRight="140dp"
+        android:width="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/personHand"
-        android:layout_width="109dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginBottom="8dp"
-        android:text="personHand"
-        app:layout_constraintBottom_toTopOf="@+id/personcard2"
-        app:layout_constraintStart_toEndOf="@+id/personPoints" />
+        android:id="@+id/potLabel"
+        android:layout_width="80dp"
+        android:layout_height="19dp"
+        android:text="Current pot:"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/burned"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/deck"
+        app:layout_constraintTop_toTopOf="@+id/deck" />
+
+    <TextView
+        android:id="@+id/currentPot"
+        android:layout_width="73dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:width="100dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/burned"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toEndOf="@+id/deck"
+        app:layout_constraintTop_toBottomOf="@+id/potLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
