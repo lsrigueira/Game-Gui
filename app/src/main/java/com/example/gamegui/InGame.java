@@ -128,7 +128,7 @@ public class InGame extends AppCompatActivity {
         betbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("c", callValue);
+                repartir("r", callValue);
             }
         });
 
@@ -136,7 +136,7 @@ public class InGame extends AppCompatActivity {
         foldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("f", 0);
+                repartir("c", 0);
             }
         });
     }
@@ -391,7 +391,7 @@ public class InGame extends AppCompatActivity {
 
     public void makePlay(char playerAction, Player player, int amount, int nrondas) {
         char action = (player.getname() == "person") ? playerAction : player.getdecision(new StringBuilder(this.history));
-    this.history += "c";
+    this.history += action;
         switch (action) {
             case 'c':
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
@@ -416,7 +416,9 @@ public class InGame extends AppCompatActivity {
             // System.out.print(infoSet + ":--" + nodeMap.size() + "\n");
             System.out.println(infoSet + "-------------no estaba");
             nodeMap.put(infoSet.toString(), node);
-        } // else System.out.println(infoSet);
+        }else {
+            System.out.println(infoSet + "------------estaba");
+        }// else System.out.println(infoSet);
         return node;
     }
 }
