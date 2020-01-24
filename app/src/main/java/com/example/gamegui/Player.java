@@ -89,13 +89,76 @@ public class Player {
         return this.moneybet;
     }
 
-    public String getdecision(int nronda) {
+    public char getdecision(StringBuilder history) {
 
         /*if(nronda==4&&calcularpuntuacion()==0){
             this.playing = false;
             return "fold";
         }*/
-        return "c";
+        final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
+        StringBuilder infoset = new StringBuilder(history);
+        infoset.append(":");
+        infoset.append(calcularpuntuacion());
+        Node node = InGame.gisnoc(infoset);
+        double[] strategy = {};
+        strategy = node.getAverageStrategy();
+        double[] util = new double[NUM_ACTIONS];
+        StringBuilder nextHistory = new StringBuilder(history);
+        while (history.length() == nextHistory.length()) {
+            double index = Math.random();
+
+            if (index < strategy[0]) {
+                if (isValidPlay(nextHistory, FOLD1)) {
+                    nextHistory.append(FOLD1);
+                    return FOLD1;
+                    //a = 0;
+                    //System.out.println("Jugador " + player + " jugó fold: " + history + "---------" + cards[player][0]
+                    //      + ":" + cards[player][1] + ":" + Arrays.toString(strategy));
+                }
+            } else if (index < strategy[0] + strategy[1]) {
+                if (isValidPlay(nextHistory, RAISE1)) {
+                    nextHistory.append(RAISE1);
+                    return RAISE1;
+                    //a = 1;
+                    //System.out.println("Jugador " + player + " jugó raise: " + history + "---------" + cards[player][0]
+                    //      + ":" + cards[player][1] + ":" + Arrays.toString(strategy));
+                }
+            } else {
+                if (isValidPlay(nextHistory, CALL1)) {
+                    nextHistory.append(CALL1);
+                    return CALL1;
+                    //a = 2;
+                    // System.out.println("Jugador " + player + " jugó call: " + history + "---------" + cards[player][0]
+                    //       + ":" + cards[player][1] + ":" + Arrays.toString(strategy));
+                }
+            }
+        }
+        System.out.println("maaaal");
+        //return "";
+        return CALL1;
+    }
+
+     public static boolean isValidPlay(StringBuilder history_, int play) {
+         final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
+        StringBuilder history = new StringBuilder(history_);
+        switch (play) {
+            case FOLD1:
+                return true;
+            case RAISE1:
+                //if (limitReached(new StringBuilder(history).append(RAISE), (history.length()) % 2, LIMIT))// De esta manera
+                //return false;																				// evitamos el
+                // re-raise
+                // infinito
+                if(history.charAt(history.length() - 2) == RAISE1 || history.charAt(history.length() - 1) == RAISE1)
+                    return false;
+                return true;
+            case CALL1:
+                return true;
+            default:
+                // Otro error aqui
+                System.out.println("erorrr");
+                return false;
+        }
     }
 
     public Card getcard1() {

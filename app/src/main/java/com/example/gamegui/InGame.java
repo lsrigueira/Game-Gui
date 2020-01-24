@@ -2,7 +2,13 @@ package com.example.gamegui;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.Edits;
@@ -14,10 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.Toast;
-
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 
 public class InGame extends AppCompatActivity {
@@ -28,12 +36,43 @@ public class InGame extends AppCompatActivity {
     int rondastotales = 0;
     int currentPot = 0;
     int callValue = 100;
-
+    static HashMap<String, Node> nodeMap = new HashMap<String, Node>();
     static long tiempoEjecucion = 0;
     static long vecesEjecucion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        InputStream ins = getResources().openRawResource(R.raw.test);
+        InputStreamReader inputStreamReader = new InputStreamReader(ins);
+        String line;
+        try {
+
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(Pattern.quote("["), 2);
+                if (parts.length >= 2) {
+                    String key = parts[0];
+                    Node node = new Node();
+                    node.infoSet = new StringBuilder(key);
+                    String value = parts[1];
+                    String[] parts2 = value.split(",");
+                    node.strategySum[0] = Double.parseDouble(parts2[0]);
+                    node.strategySum[1] = Double.parseDouble(parts2[1]);
+                    node.strategySum[2] = Double.parseDouble(parts2[2]);
+                    node.strategySum[3] = Double.parseDouble(parts2[3].split(Pattern.quote("]"))[0]);
+                    nodeMap.put(key, node);
+                } else {
+                    System.out.println("ignoring line: " + line);
+                }
+            }
+
+            for (String key : nodeMap.keySet()) {
+                // System.out.println(nodeMap.get(key));
+            }
+        }catch(IOException e) {
+            System.out.println("Wrong or inexistant file!!");
+        }
         super.onCreate(savedInstanceState);
         this.setTitle("Poker Texas Holdem");
         setContentView(R.layout.activity_in_game);
@@ -347,10 +386,10 @@ public class InGame extends AppCompatActivity {
 
     }
 
-    public void makePlay(String action, Player player, int amount, int nrondas) {
-
+    public void makePlay(String playerAction, Player player, int amount, int nrondas) {
+        String action = (player.getname() == "person") ? playerAction : player.getdecision(nrondas);
         switch (action) {
-            case "c":
+            case "call":
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
                 if (amount >= player.getMoney()) {
                     player.setState(Player.ALL_IN);
@@ -359,10 +398,22 @@ public class InGame extends AppCompatActivity {
                 player.loose(loose_value);
                 addToCurrentPot(amount);
                 break;
-            case "f":
+            case "fold":
                 player.setState(Player.FOLD);
                 player.stop_playing();
         }
+    }
+
+    public static Node gisnoc(StringBuilder infoSet) {
+        Node node = nodeMap.get(infoSet.toString());
+        if (node == null) {
+            node = new Node();
+            node.infoSet = infoSet;
+            // System.out.print(infoSet + ":--" + nodeMap.size() + "\n");
+            System.out.println(infoSet + "-------------no estaba");
+            nodeMap.put(infoSet.toString(), node);
+        } // else System.out.println(infoSet);
+        return node;
     }
 }
 
