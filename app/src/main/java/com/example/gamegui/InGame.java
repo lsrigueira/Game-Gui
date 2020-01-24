@@ -161,6 +161,7 @@ public class InGame extends AppCompatActivity {
     public void repartir(String playerAction, int amount_value) {
         this.current_round++;
         int contador = 0;
+
         switch (current_round) {
             case 1:
                 refreshpoints();
@@ -178,7 +179,6 @@ public class InGame extends AppCompatActivity {
                 for (Player x : jugadores){
                     makePlay("call", x, callValue * x.getBlind(), 0);
                 }
-                System.out.println("PASANDO POR AQUÏ");
                 refreshpoints();
                 break;
             case 2: //PREFLOP
@@ -227,6 +227,13 @@ public class InGame extends AppCompatActivity {
                 break;
 
             case 3: //FLOP
+                for (Player x : jugadores) {
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+                i = 0;
+                break;
+            case 4: //FLOP
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -244,13 +251,6 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("2");
                 i = 0;
                 break;
-            case 4: //FLOP
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
-                refreshpoints();
-                i = 0;
-                break;
             case 5: //TURN
                 for (Player x : jugadores) {
                     makePlay(playerAction, x, amount_value, current_round);
@@ -263,12 +263,6 @@ public class InGame extends AppCompatActivity {
                 i = 0;
                 break;
             case 6: //TURN
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
-                refreshpoints();
-                break;
-            case 7: //RIVER
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -285,6 +279,13 @@ public class InGame extends AppCompatActivity {
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("4");
                 i = 0;
+                break;
+            case 7: //RIVER
+                for (Player x : jugadores) {
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+
                 break;
             case 8: //RIVER
                 for (Player x : jugadores) {
