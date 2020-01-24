@@ -177,6 +177,7 @@ public class InGame extends AppCompatActivity {
                 textodeck.setVisibility(View.VISIBLE);
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador = 0;
+                //TODO FLAKIES? :
                 for (Player x : jugadores) {
                     x.getdecision(current_round);
                 }
@@ -220,9 +221,16 @@ public class InGame extends AppCompatActivity {
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("1");
                 auxText.setVisibility(View.VISIBLE);
-
                 break;
-            case 3: //FLOP
+
+            case 3: //PREFLOP
+                for (Player x : jugadores) {
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+                break;
+
+            case 4: //FLOP
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -240,7 +248,14 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("2");
                 i = 0;
                 break;
-            case 4: //TURN
+            case 5: //FLOP
+                for (Player x : jugadores) {
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+                i = 0;
+                break;
+            case 6: //TURN
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -258,7 +273,13 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("3");
                 i = 0;
                 break;
-            case 5: //RIVER
+            case 7: //TURN
+                for (Player x : jugadores) {
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+                break;
+            case 8: //RIVER
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -275,7 +296,13 @@ public class InGame extends AppCompatActivity {
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("4");
                 i = 0;
-
+            case 9: //RIVER
+                for (Player x : jugadores) {
+                    x.newCarta(card1);
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+                i = 0;
                 long startTime = System.nanoTime();
                 Integer[] puntuaciones = new Integer[jugadores.size()];
                 for (contador = 0; contador < jugadores.size(); contador++) {
