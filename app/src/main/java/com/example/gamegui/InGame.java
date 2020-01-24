@@ -211,6 +211,8 @@ public class InGame extends AppCompatActivity {
             }
         }
 
+        if(machineAction == 'c' || machineAction == 'r' && playerAction)
+
         switch (current_round) {
             case 1:
                 refreshpoints();

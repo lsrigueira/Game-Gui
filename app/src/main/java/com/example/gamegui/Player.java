@@ -92,8 +92,7 @@ public class Player {
             return "fold";
         }*/
         final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
-        StringBuilder infoset = history.length() > 4 ? new StringBuilder(history.substring(history.length() - 5))
-                :new StringBuilder(history);
+        StringBuilder infoset = new StringBuilder(history);
         infoset.append(":");
         infoset.append(calcularpuntuacion());
         Node node = InGame.gisnoc(infoset);
@@ -107,26 +106,22 @@ public class Player {
             if (index < strategy[0]) {
                 if (isValidPlay(nextHistory, FOLD1)) {
                     nextHistory.append(FOLD1);
-                    System.out.println("Jugador  jugó fold: " + infoset);
                     return FOLD1;
                     //a = 0;
-
+                    //System.out.println("Jugador " + player + " jugó fold: " + history + "---------" + cards[player][0]
                     //      + ":" + cards[player][1] + ":" + Arrays.toString(strategy));
                 }
             } else if (index < strategy[0] + strategy[1]) {
                 if (isValidPlay(nextHistory, RAISE1)) {
                     nextHistory.append(RAISE1);
-                    System.out.println("Jugador  jugó raise: " + infoset);
                     return RAISE1;
                     //a = 1;
                     //System.out.println("Jugador " + player + " jugó raise: " + history + "---------" + cards[player][0]
-
                     //      + ":" + cards[player][1] + ":" + Arrays.toString(strategy));
                 }
             } else {
                 if (isValidPlay(nextHistory, CALL1)) {
                     nextHistory.append(CALL1);
-                    System.out.println("Jugador  jugó call: " + infoset);
                     return CALL1;
                     //a = 2;
                     // System.out.println("Jugador " + player + " jugó call: " + history + "---------" + cards[player][0]
@@ -403,6 +398,8 @@ public class Player {
 
     private int calcularPuntos(ArrayList<Card> cartas, String sitio) {
 
+        resetearCartas(cartas);
+
         int puntos, valorPoker, valorTrio, valorPareja1, valorPareja2, valorColor, valorEscalera;
 
         int highcardmesa = cartaAlta(cartas);
@@ -475,11 +472,11 @@ public class Player {
 
         ArrayList<Card> cartasTotales = new ArrayList<>();
         ArrayList<Card> cartasMesa = new ArrayList<>();
-        System.out.println(cartasmesa.toString());
-        resetearCartas(cartastot);
-        resetearCartas(cartasmesa);
         cartasTotales.addAll(cartastot);
         cartasMesa.addAll(cartasmesa);
+
+        System.out.println(this.getname() + "Cartas TOTALES = " + cartasTotales.toString());
+        System.out.println(this.getname() + "Cartas MESA = " + cartasMesa.toString());
 
         int puntosjugador = calcularPuntos(cartasTotales, "TOTAL");
         int puntuacionmesa = calcularPuntos(cartasMesa, "MESA");
