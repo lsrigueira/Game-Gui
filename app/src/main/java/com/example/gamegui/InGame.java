@@ -24,11 +24,10 @@ public class InGame extends AppCompatActivity {
 
     ArrayList<Card> cartasenbaraja;
     final ArrayList<Player> jugadores = new ArrayList<>();
-    int nrondas = 0;
+    int current_round = 0;
     int rondastotales = 0;
     int currentPot = 0;
     int callValue = 100;
-    int seekValue = callValue;
 
     static long tiempoEjecucion = 0;
     static long vecesEjecucion = 0;
@@ -47,19 +46,6 @@ public class InGame extends AppCompatActivity {
         );
         jugadores.add(jugador1);
 
-        Player jugador2 = new Player("player2", 10000,
-                ((ImageView) findViewById(R.id.player2card1)),
-                ((ImageView) findViewById(R.id.player2card2)),
-                ((TextView) findViewById(R.id.player2Points))
-        );
-        jugadores.add(jugador2);
-
-        Player jugador3 = new Player("player3", 10000,
-                ((ImageView) findViewById(R.id.player3card1)),
-                ((ImageView) findViewById(R.id.player3card2)),
-                ((TextView) findViewById(R.id.player3Points))
-        );
-        jugadores.add(jugador3);
         final Player persona = new Player("person", 10000,
                 ((ImageView) findViewById(R.id.personcard1)),
                 ((ImageView) findViewById(R.id.personcard2)),
@@ -88,11 +74,6 @@ public class InGame extends AppCompatActivity {
             }
         });
 
-        final SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
-        final TextView seekBarValue = (TextView) findViewById(R.id.amount);
-        seekBar.setProgress(1);
-        seekBar.setProgress(0);
-
         Button backbutton = (Button) findViewById(R.id.BackButton);
         backbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +86,7 @@ public class InGame extends AppCompatActivity {
         betbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("call", seekValue);
+                repartir("call", callValue);
             }
         });
 
@@ -116,45 +97,14 @@ public class InGame extends AppCompatActivity {
                 repartir("fold", 0);
             }
         });
-
-
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (persona.getState() == Player.FOLD) {
-                    seekBarValue.setText("Folded");
-                    return;
-                }
-                if (persona.getMoney() < callValue) {
-                    seekBarValue.setText(persona.getMoney() + " ALL IN!");
-                    return;
-                }
-                double amount_value = ((persona.getMoney() - callValue) * ((Double.valueOf(progress)) / 100)) + callValue;
-                seekValue = Integer.valueOf((int) amount_value);
-                String amount = Integer.toString(seekValue);
-                if (progress == 100) amount = amount.concat(" ALL IN!");
-                else if (progress == 0) amount = amount.concat(" Call");
-                else amount = amount.concat(" Raise!");
-                seekBarValue.setText(amount);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
     }
 
 
     public void nuevamano() {
         this.rondastotales++;
         this.cartasenbaraja = functions.nueva_baraja();
-        this.nrondas = 0;
-        if (this.rondastotales > 1) this.nrondas++;
+        this.current_round = 0;
+        if (this.rondastotales > 1) this.current_round++;
         findViewById(R.id.newround).setEnabled(false);
         findViewById(R.id.newround).setVisibility(View.INVISIBLE);
 
@@ -207,13 +157,13 @@ public class InGame extends AppCompatActivity {
     }
 
     public void repartir(String playerAction, int amount_value) {
-        this.nrondas++;
+        this.current_round++;
         int index = (int) (Math.random() * cartasenbaraja.size());
         Card card1 = cartasenbaraja.get(index);
         card1.setPosicion("Mesa");
         cartasenbaraja.remove(index);//Queimamos unha carta
         int contador = 0;
-        switch (nrondas) {
+        switch (current_round) {
             case 1:
                 refreshpoints();
                 findViewById(R.id.player1Points).setVisibility(View.VISIBLE);
@@ -228,10 +178,10 @@ public class InGame extends AppCompatActivity {
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador = 0;
                 for (Player x : jugadores) {
-                    x.getdecision(nrondas);
+                    x.getdecision(current_round);
                 }
                 break;
-            case 2:
+            case 2: //PREFLOP
                 int i = 0;
                 //Enseñamos a primeira carta da mesa(xerada arriba)
                 ImageView aux = (ImageView) findViewById(R.id.tablecard1);
@@ -262,7 +212,7 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux, card1.getId());
                 for (Player x : jugadores) {
                     x.newCarta(card1);
-                    makePlay(playerAction, x, amount_value, nrondas);
+                    makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
@@ -272,7 +222,7 @@ public class InGame extends AppCompatActivity {
                 auxText.setVisibility(View.VISIBLE);
 
                 break;
-            case 3:
+            case 3: //FLOP
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -281,7 +231,7 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux, card1.getId());
                 for (Player x : jugadores) {
                     x.newCarta(card1);
-                    makePlay(playerAction, x, amount_value, nrondas);
+                    makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
@@ -290,7 +240,7 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("2");
                 i = 0;
                 break;
-            case 4:
+            case 4: //TURN
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -299,7 +249,7 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux, card1.getId());
                 for (Player x : jugadores) {
                     x.newCarta(card1);
-                    makePlay(playerAction, x, amount_value, nrondas);
+                    makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
@@ -308,7 +258,24 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("3");
                 i = 0;
                 break;
-            case 5:
+            case 5: //RIVER
+                index = (int) (Math.random() * cartasenbaraja.size());
+                card1 = cartasenbaraja.get(index);
+                card1.setPosicion("Mesa");
+                cartasenbaraja.remove(index);
+                aux = (ImageView) findViewById(R.id.tablecard5);
+                functions.enseñar_carta(aux, card1.getId());
+                for (Player x : jugadores) {
+                    x.newCarta(card1);
+                    makePlay(playerAction, x, amount_value, current_round);
+                }
+                refreshpoints();
+                auxText = (TextView) findViewById(R.id.cartasendeck);
+                auxText.setText(Integer.toString(cartasenbaraja.size()));
+                auxText = (TextView) findViewById(R.id.cartasburned);
+                auxText.setText("4");
+                i = 0;
+
                 long startTime = System.nanoTime();
                 Integer[] puntuaciones = new Integer[jugadores.size()];
                 for (contador = 0; contador < jugadores.size(); contador++) {
@@ -326,7 +293,6 @@ public class InGame extends AppCompatActivity {
                 jugadores.get(indexganador).win(currentPot);
                 setCurrentPot(0);
                 this.callValue = 100;
-                this.seekValue = callValue;
                 refreshpoints();
                 if (jugadores.get(jugadores.size() - 1).getMoney() <= 0) {
                     Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
@@ -334,7 +300,7 @@ public class InGame extends AppCompatActivity {
                 }
                 Toast result = (jugadores.get(indexganador).getname() == "person") ?
                         Toast.makeText(this.getBaseContext(), "You win, congrats!", Toast.LENGTH_SHORT) :
-                        Toast.makeText(this.getBaseContext(), "Te bañaste!", Toast.LENGTH_SHORT);
+                        Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
                 result.show();
                 for (i = 0; i < jugadores.size(); i++) {
                     Player player = jugadores.get(i);
@@ -349,11 +315,9 @@ public class InGame extends AppCompatActivity {
                 findViewById(R.id.newround).setEnabled(true);
                 findViewById(R.id.newround).setVisibility(View.VISIBLE);
             default:
-                functions.imprimirdebug("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS" + nrondas, 2);
+                functions.imprimirdebug("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS" + current_round, 2);
 
         }
-        ((SeekBar) findViewById(R.id.seekBar)).setProgress(1); //Forzamos a que a barra se actualice cambiando dúas veces de valor
-        ((SeekBar) findViewById(R.id.seekBar)).setProgress(0);
     }
 
     public void makePlay(String playerAction, Player player, int amount, int nrondas) {

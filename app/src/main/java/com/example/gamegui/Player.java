@@ -27,10 +27,13 @@ public class Player {
     static final int CASTTOBESTCARDOUTPLAY = 1;
 
     static final String CALL = "Call";
-    static final String RAISE = "Raise";
     static final String FOLD = "Fold";
     static final String ALL_IN = "All in!";
     static final String BROKE = "Broke";
+
+    static final short NO_BLIND = 0;
+    static final short SMALL_BLIND = 1;
+    static final short BIG_BLIND = 2;
 
     private Card card1;
     private Card card2;
@@ -52,6 +55,15 @@ public class Player {
     private String playState = Player.CALL;
     private long puntuacion;
     private long puntuacionmesa;
+    private short blind = 0;
+
+    public short getBlind() {
+        return blind;
+    }
+
+    public void setBlind(short blind) {
+        this.blind = blind;
+    }
 
     public Player(String nome, int money, ImageView imagencarta1, ImageView imagencarta2, TextView textPuntos) {
         this.nome = nome;
@@ -62,6 +74,8 @@ public class Player {
         cartastot = new ArrayList<>();
         cartasmesa = new ArrayList<>();
     }
+
+
 
     public long getPuntuacion() {
         return this.puntuacion;
