@@ -44,7 +44,7 @@ public class InGame extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.player1card2)),
                 ((TextView) findViewById(R.id.player1Points))
         );
-        jugador1.setBlind(Player.SMALL_BLIND);
+        jugador1.setBlind(Player.BIG_BLIND);
         jugadores.add(jugador1);
 
         final Player persona = new Player("person", 10000,
@@ -52,7 +52,7 @@ public class InGame extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.personcard2)),
                 ((TextView) findViewById(R.id.personPoints))
         );
-        persona.setBlind(Player.BIG_BLIND);
+        persona.setBlind(Player.SMALL_BLIND);
         jugadores.add(persona);
 
         int i = 0;
@@ -89,7 +89,7 @@ public class InGame extends AppCompatActivity {
         betbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("call", callValue);
+                repartir("c", callValue);
             }
         });
 
@@ -97,7 +97,7 @@ public class InGame extends AppCompatActivity {
         foldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("fold", 0);
+                repartir("f", 0);
             }
         });
     }
@@ -160,7 +160,15 @@ public class InGame extends AppCompatActivity {
 
     public void repartir(String playerAction, int amount_value) {
         this.current_round++;
+        Player maquina = jugadores.get(0);
+        Player persona = jugadores.get(1);
         int contador = 0;
+        String machineAction = maquina.getdecision(0);
+        if(current_round > 2){
+            if(playerAction == machineAction){
+                this.current_round++;
+            }
+        }
 
         switch (current_round) {
             case 1:
@@ -216,8 +224,9 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux, card1.getId());
                 for (Player x : jugadores) {
                     x.newCarta(card1);
-                    makePlay(playerAction, x, amount_value, current_round);
                 }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
@@ -227,9 +236,8 @@ public class InGame extends AppCompatActivity {
                 break;
 
             case 3: //FLOP
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 i = 0;
                 break;
@@ -242,8 +250,9 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux, card1.getId());
                 for (Player x : jugadores) {
                     x.newCarta(card1);
-                    makePlay(playerAction, x, amount_value, current_round);
                 }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
@@ -252,9 +261,8 @@ public class InGame extends AppCompatActivity {
                 i = 0;
                 break;
             case 5: //TURN
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
@@ -271,8 +279,9 @@ public class InGame extends AppCompatActivity {
                 functions.enseñar_carta(aux, card1.getId());
                 for (Player x : jugadores) {
                     x.newCarta(card1);
-                    makePlay(playerAction, x, amount_value, current_round);
                 }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
@@ -281,16 +290,14 @@ public class InGame extends AppCompatActivity {
                 i = 0;
                 break;
             case 7: //RIVER
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
 
                 break;
             case 8: //RIVER
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
+                makePlay(playerAction, persona, amount_value, current_round);
+                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 i = 0;
                 long startTime = System.nanoTime();
@@ -340,11 +347,10 @@ public class InGame extends AppCompatActivity {
 
     }
 
-    public void makePlay(String playerAction, Player player, int amount, int nrondas) {
+    public void makePlay(String action, Player player, int amount, int nrondas) {
 
-        String action = (player.getname() == "person" || nrondas == 0) ? playerAction : player.getdecision(nrondas);
         switch (action) {
-            case "call":
+            case "c":
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
                 if (amount >= player.getMoney()) {
                     player.setState(Player.ALL_IN);
@@ -353,7 +359,7 @@ public class InGame extends AppCompatActivity {
                 player.loose(loose_value);
                 addToCurrentPot(amount);
                 break;
-            case "fold":
+            case "f":
                 player.setState(Player.FOLD);
                 player.stop_playing();
         }

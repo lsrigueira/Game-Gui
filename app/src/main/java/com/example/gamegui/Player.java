@@ -95,7 +95,7 @@ public class Player {
             this.playing = false;
             return "fold";
         }*/
-        return "call";
+        return "c";
     }
 
     public Card getcard1() {

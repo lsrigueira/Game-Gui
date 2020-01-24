@@ -188,7 +188,7 @@
         android:id="@+id/foldButton"
         android:layout_width="77dp"
         android:layout_height="88dp"
-        android:text="Fold"
+        android:text="No bet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/betbutton"
         app:layout_constraintHorizontal_bias="0.047"
