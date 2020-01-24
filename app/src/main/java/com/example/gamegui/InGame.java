@@ -145,6 +145,7 @@ public class InGame extends AppCompatActivity {
     public void nuevamano() {
         this.rondastotales++;
         this.cartasenbaraja = functions.nueva_baraja();
+        this.history = "rr";
         this.current_round = 0;
         findViewById(R.id.newround).setEnabled(false);
         findViewById(R.id.newround).setVisibility(View.INVISIBLE);
@@ -196,11 +197,12 @@ public class InGame extends AppCompatActivity {
             player.getTextPuntos().setText(Integer.toString(player.getMoney()));
         }
     }
-
+    String history = "rr";
     public void repartir(String playerAction, int amount_value) {
         this.current_round++;
         Player maquina = jugadores.get(0);
         Player persona = jugadores.get(1);
+        System.out.println(this.history);
         int contador = 0;
         String machineAction = maquina.getdecision(0);
         if(current_round == 3 || current_round == 5 || current_round == 7){
@@ -225,6 +227,7 @@ public class InGame extends AppCompatActivity {
                 contador = 0;
                 for (Player x : jugadores){
                     makePlay("call", x, callValue * x.getBlind(), 0);
+
                 }
                 refreshpoints();
                 break;
@@ -388,6 +391,7 @@ public class InGame extends AppCompatActivity {
 
     public void makePlay(String playerAction, Player player, int amount, int nrondas) {
         String action = (player.getname() == "person") ? playerAction : player.getdecision(nrondas);
+    this.history += "c";
         switch (action) {
             case "call":
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
