@@ -164,7 +164,7 @@ public class InGame extends AppCompatActivity {
         Player persona = jugadores.get(1);
         int contador = 0;
         String machineAction = maquina.getdecision(0);
-        if(current_round > 2){
+        if(current_round == 3 || current_round == 5 || current_round == 7){
             if(playerAction == machineAction){
                 this.current_round++;
             }
