@@ -57,14 +57,6 @@ public class Player {
     private long puntuacionmesa;
     private short blind = 0;
 
-    public short getBlind() {
-        return blind;
-    }
-
-    public void setBlind(short blind) {
-        this.blind = blind;
-    }
-
     public Player(String nome, int money, ImageView imagencarta1, ImageView imagencarta2, TextView textPuntos) {
         this.nome = nome;
         this.money = money;
@@ -75,7 +67,13 @@ public class Player {
         cartasmesa = new ArrayList<>();
     }
 
+    public short getBlind() {
+        return blind;
+    }
 
+    public void setBlind(short blind) {
+        this.blind = blind;
+    }
 
     public long getPuntuacion() {
         return this.puntuacion;
@@ -138,8 +136,8 @@ public class Player {
         return CALL1;
     }
 
-     public static boolean isValidPlay(StringBuilder history_, int play) {
-         final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
+    public static boolean isValidPlay(StringBuilder history_, int play) {
+        final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
         StringBuilder history = new StringBuilder(history_);
         switch (play) {
             case FOLD1:
@@ -149,7 +147,7 @@ public class Player {
                 //return false;																				// evitamos el
                 // re-raise
                 // infinito
-                if(history.charAt(history.length() - 2) == RAISE1 || history.charAt(history.length() - 1) == RAISE1)
+                if (history.charAt(history.length() - 2) == RAISE1 || history.charAt(history.length() - 1) == RAISE1)
                     return false;
                 return true;
             case CALL1:
@@ -171,14 +169,6 @@ public class Player {
 
     public String getname() {
         return this.nome;
-    }
-
-    public ArrayList<Card> getcartastot() {
-        return this.cartastot;
-    }
-
-    public ArrayList<Card> getcartasmesa() {
-        return this.cartasmesa;
     }
 
     public void enseñar_reverso() {
@@ -238,7 +228,6 @@ public class Player {
         this.horizontal = horizontal;
     }
 
-
     public void newCarta(Card carta) {
         this.cartastot.add(0, carta);
         this.puntuacion = 0;
@@ -260,8 +249,9 @@ public class Player {
         this.cartasmesa = new ArrayList<>();
     }
 
+    // Funciones para el calculo de puntuaciones
 
-    public int bestcard(ArrayList<Card> cartas) {
+    private int cartaAlta(ArrayList<Card> cartas) {
 
         int bestcard = 0;
         for (int contador = 0; contador < cartas.size(); contador++) {
@@ -374,7 +364,7 @@ public class Player {
         return 0;
     }
 
-    private int haiEscalera(ArrayList<Card> cartas) {
+    private int hayEscalera(ArrayList<Card> cartas) {
 
         for (int nCarta = 0; nCarta < cartas.size(); nCarta++) {
             Card cartaA = cartas.get(nCarta);
@@ -416,18 +406,11 @@ public class Player {
         return 0;
     }
 
-    /*
-    A puntuacion sera un int de formato xx-yy-yy-zz onde as letras solo indican o numero de dixistos e a orixe do calculo.Explicacion:
-        XX: Indica se o xogar ten parexa,doble-parexa,TRIO...
-        YY: Indica as cartas que usou para chegar ahí, non é o mesmo unha parexa de ases que de douses(hai 2 para distinguir as doble-parexas)
-        ZZ: Indica a carta mais alta que non se empregou para o cálculo de XX
-     */
-
-    public int calcularPuntos(ArrayList<Card> cartas) {
+    private int calcularPuntos(ArrayList<Card> cartas) {
 
         int puntos, valorPoker, valorTrio, valorPareja1, valorPareja2, valorColor, valorEscalera;
 
-        int highcardmesa = bestcard(cartas);
+        int highcardmesa = cartaAlta(cartas);
         functions.imprimirdebug(this.getname() + " CARTA MAIS ALTA-->" + highcardmesa, 3);
 
         valorPoker = hayPokerOTrio(cartas);
@@ -456,7 +439,7 @@ public class Player {
         }
 
         //cuesta aprox 100ms
-        valorEscalera = haiEscalera(cartas);
+        valorEscalera = hayEscalera(cartas);
         if (valorEscalera > 0) {
             puntos = STRAIGHT * CASTTOBESTPLAY + valorEscalera * CASTTOBESTCARDINPLAY + highcardmesa;
             functions.imprimirdebug(this.getname() + ":ENCONTRADO STRAIGHT-->" + puntos, 1);
@@ -487,10 +470,19 @@ public class Player {
         return puntos;
     }
 
+    private void resetearCartas(ArrayList<Card> cartas) {
+        for (int nCarta = 0; nCarta < cartas.size(); nCarta++) {
+            Card CartaA = cartas.get(nCarta);
+            CartaA.setUsed(false);
+        }
+    }
+
     public int calcularpuntuacion() {
 
         ArrayList<Card> cartasTotales = new ArrayList<>();
         ArrayList<Card> cartasMesa = new ArrayList<>();
+        resetearCartas(cartastot);
+        resetearCartas(cartasmesa);
         cartasTotales.addAll(cartastot);
         cartasMesa.addAll(cartasmesa);
 

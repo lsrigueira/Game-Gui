@@ -226,7 +226,7 @@ public class InGame extends AppCompatActivity {
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador = 0;
                 for (Player x : jugadores){
-                    makePlay('c', x, callValue * x.getBlind(), 0);
+                    makePlay('c', x, 50 * x.getBlind(), 0);
 
                 }
                 refreshpoints();
@@ -386,11 +386,10 @@ public class InGame extends AppCompatActivity {
 
         }
         return;
-
     }
 
-    public void makePlay(char playerAction, Player player, int amount, int nrondas) {
-        char action = (player.getname() == "person") ? playerAction : player.getdecision(new StringBuilder(this.history));
+    public void makePlay(char action, Player player, int amount, int nrondas) {
+
     this.history += action;
         switch (action) {
             case 'c':

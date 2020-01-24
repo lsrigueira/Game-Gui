@@ -1,6 +1,5 @@
 package com.example.gamegui;
 
-
 import androidx.annotation.NonNull;
 
 public class Card {
@@ -22,7 +21,7 @@ public class Card {
         }
     }
 
-    public void setUsed(boolean x){
+    public void setUsed(boolean x) {
         this.used = x;
     }
 
@@ -30,11 +29,11 @@ public class Card {
         this.posicion = posicion;
     }
 
-    public boolean getUsed(){
+    public boolean getUsed() {
         return this.used;
     }
 
-    public String getPosicion(){
+    public String getPosicion() {
         return this.posicion;
     }
 
@@ -43,12 +42,10 @@ public class Card {
     }
 
     public String getSuit() {
-
         return suit;
     }
 
     public String getRank() {
-
         return rank;
     }
 
@@ -58,7 +55,7 @@ public class Card {
 
         String rank_name = "";
         String suit_name = "";
-        switch(this.suit){
+        switch (this.suit) {
             case "C":
                 suit_name = "clubs";
                 break;
@@ -73,75 +70,66 @@ public class Card {
                 break;
         }
 
-        switch (this.rank){
-            case"A":
+        switch (this.rank) {
+            case "A":
                 rank_name = "Ace";
                 break;
-            case"2":
+            case "2":
                 rank_name = "Two";
                 break;
-            case"3":
+            case "3":
                 rank_name = "Three";
                 break;
-            case"4":
+            case "4":
                 rank_name = "Four";
                 break;
-            case"5":
+            case "5":
                 rank_name = "Five";
                 break;
-            case"6":
+            case "6":
                 rank_name = "Six";
                 break;
-            case"7":
+            case "7":
                 rank_name = "Seven";
                 break;
-            case"8":
+            case "8":
                 rank_name = "Eight";
                 break;
-            case"9":
+            case "9":
                 rank_name = "Nine";
                 break;
-            case"10":
+            case "10":
                 rank_name = "Ten";
                 break;
-            case"J":
+            case "J":
                 rank_name = "Jack";
                 break;
-            case"Q":
+            case "Q":
                 rank_name = "Queen";
                 break;
-            case"K":
+            case "K":
                 rank_name = "King";
                 break;
         }
-
         return rank_name + " of " + suit_name;
-
-    }
-    
-    public boolean equals(Card other) {
-        return this.id.equals(other.id);
-    }
-
-    public boolean equalSuit(Card other) {
-        return this.suit.equals(other.suit);
-    }
-
-    public int compareRank(Card other){
-        return new Integer(this.getRankValue()).compareTo(new Integer(other.getRankValue())) ;
     }
 
     public int getRankValue() {
         try {
             return Integer.parseInt(this.rank);
-        } catch (NumberFormatException nfe){
-           switch (this.rank){
-               case "J": return 11;
-               case "Q": return 12;
-               case "K": return 13;
-               case "A": return 14;
-               default: return 0;
-           }
+        } catch (NumberFormatException nfe) {
+            switch (this.rank) {
+                case "J":
+                    return 11;
+                case "Q":
+                    return 12;
+                case "K":
+                    return 13;
+                case "A":
+                    return 14;
+                default:
+                    return 0;
+            }
         }
     }
 }

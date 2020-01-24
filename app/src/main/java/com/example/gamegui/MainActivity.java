@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button optionsbutton = (Button) findViewById(R.id.optionsbutton);
+        Button optionsbutton = findViewById(R.id.optionsbutton);
         optionsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button playbutton = (Button) findViewById(R.id.playbutton);
+        Button playbutton = findViewById(R.id.playbutton);
         playbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
