@@ -13,14 +13,12 @@ public class functions {
     public static ArrayList<Card> nueva_baraja() {
         ArrayList<Card> cartasenbaraja = new ArrayList<>();
         String[] letras = {"S", "H", "C", "D"};
-        String[] numeros = {"A", "2", "3", "4", "5", "6", "7","8","9","10","J","Q","K"};
-        int contador1 = 0;
-        for (contador1 = 0; contador1 < letras.length; contador1++) {
-            int contador2 = 0;
-            for (contador2 = 0; contador2 < numeros.length; contador2++) {
+        String[] numeros = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+        for (int contador1 = 0; contador1 < letras.length; contador1++)
+            for (int contador2 = 0; contador2 < numeros.length; contador2++)
                 cartasenbaraja.add(new Card(String.format("%s", numeros[contador2] + letras[contador1])));
-            }
-        }
+
         return cartasenbaraja;
     }
 
@@ -197,6 +195,39 @@ public class functions {
 
     }
 
+
+    public static int maximo(Integer[] array) {
+        int maximo = Integer.MIN_VALUE;
+        for (int contador = 0; contador < array.length; contador++) {
+            if (array[contador] > maximo) {
+                maximo = array[contador];
+            }
+        }
+        return maximo;
+    }
+
+    public static void imprimirdebug(String paraimprimir, int nivel) {
+
+        if (nivel <= DEBUGLEVEL) {
+            System.out.println(paraimprimir);
+        }
+    }
+
+    public static void cashflow(ArrayList<Player> jugadores, int indexganador) {
+        int totalmoneybet = 0;
+        int monebet = 0;
+        for (int contador = 0; contador < jugadores.size(); contador++) {
+            if (contador == indexganador) continue;
+            else {
+                monebet = jugadores.get(contador).getBet();
+                jugadores.get(contador).loose(monebet);
+                totalmoneybet += monebet;
+            }
+        }
+        jugadores.get(indexganador).win(totalmoneybet);
+    }
+
+
     public static void enseñar_carta(Player x) {
         /*switch (x.getname()){
             case "player1":
@@ -214,34 +245,4 @@ public class functions {
         }*/
     }
 
-    public static int maximo(Integer[] array) {
-        int maximo = Integer.MIN_VALUE;
-        for (int contador = 0; contador < array.length; contador++) {
-            if (array[contador] > maximo) {
-                maximo = array[contador];
-            }
-        }
-        return maximo;
-    }
-
-    public static void cashflow(ArrayList<Player> jugadores, int indexganador) {
-        int totalmoneybet = 0;
-        int monebet = 0;
-        for (int contador = 0; contador < jugadores.size(); contador++) {
-            if (contador == indexganador) continue;
-            else {
-                monebet = jugadores.get(contador).getBet();
-                jugadores.get(contador).loose(monebet);
-                totalmoneybet += monebet;
-            }
-        }
-        jugadores.get(indexganador).win(totalmoneybet);
-    }
-
-    public static void imprimirdebug(String paraimprimir, int nivel) {
-
-        if (nivel <= DEBUGLEVEL) {
-            System.out.println(paraimprimir);
-        }
-    }
 }
