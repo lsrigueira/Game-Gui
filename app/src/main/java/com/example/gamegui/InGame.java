@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -28,7 +29,7 @@ public class InGame extends AppCompatActivity {
     int rondastotales = 0;
     int currentPot = 0;
     int callValue = 100;
-
+    static HashMap<String, Node> nodeMap = new HashMap<String, Node>();
     static long tiempoEjecucion = 0;
     static long vecesEjecucion = 0;
 
@@ -179,7 +180,7 @@ public class InGame extends AppCompatActivity {
                 contador = 0;
                 //TODO FLAKIES? :
                 for (Player x : jugadores) {
-                    x.getdecision(current_round);
+                    x.getdecision(new StringBuilder("historico aqui!!"));
                 }
                 break;
             case 2: //PREFLOP
@@ -348,9 +349,11 @@ public class InGame extends AppCompatActivity {
     }
 
     public void makePlay(String playerAction, Player player, int amount, int nrondas) {
-        String action = (player.getname() == "person") ? playerAction : player.getdecision(nrondas);
+
+
+        char action = (player.getname() == "person") ? playerAction.charAt(0) : player.getdecision(new StringBuilder("historico aqui!!"));
         switch (action) {
-            case "call":
+            case 'c':
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
                 if (amount >= player.getMoney()) {
                     player.setState(Player.ALL_IN);
@@ -360,10 +363,22 @@ public class InGame extends AppCompatActivity {
                 addToCurrentPot(amount);
                 callValue = amount;
                 break;
-            case "fold":
+            case 'f':
                 player.setState(Player.FOLD);
                 player.stop_playing();
         }
+    }
+
+    public static Node gisnoc(StringBuilder infoSet) {
+        Node node = nodeMap.get(infoSet.toString());
+        if (node == null) {
+            node = new Node();
+            node.infoSet = infoSet;
+            // System.out.print(infoSet + ":--" + nodeMap.size() + "\n");
+            System.out.println(infoSet + "-------------no estaba");
+            nodeMap.put(infoSet.toString(), node);
+        } // else System.out.println(infoSet);
+        return node;
     }
 }
 
