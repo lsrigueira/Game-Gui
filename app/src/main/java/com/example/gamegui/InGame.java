@@ -160,10 +160,6 @@ public class InGame extends AppCompatActivity {
 
     public void repartir(String playerAction, int amount_value) {
         this.current_round++;
-        int index = (int) (Math.random() * cartasenbaraja.size());
-        Card card1 = cartasenbaraja.get(index);
-        card1.setPosicion("Mesa");
-        cartasenbaraja.remove(index);//Queimamos unha carta
         int contador = 0;
         switch (current_round) {
             case 1:
@@ -186,6 +182,10 @@ public class InGame extends AppCompatActivity {
                 refreshpoints();
                 break;
             case 2: //PREFLOP
+                int index = (int) (Math.random() * cartasenbaraja.size());
+                Card card1 = cartasenbaraja.get(index);
+                card1.setPosicion("Mesa");
+                cartasenbaraja.remove(index);//Queimamos unha carta
                 int i = 0;
                 //Enseñamos a primeira carta da mesa(xerada arriba)
                 ImageView aux = (ImageView) findViewById(R.id.tablecard1);
@@ -226,14 +226,7 @@ public class InGame extends AppCompatActivity {
                 auxText.setVisibility(View.VISIBLE);
                 break;
 
-            case 3: //PREFLOP
-                for (Player x : jugadores) {
-                    makePlay(playerAction, x, amount_value, current_round);
-                }
-                refreshpoints();
-                break;
-
-            case 4: //FLOP
+            case 3: //FLOP
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -251,22 +244,15 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("2");
                 i = 0;
                 break;
-            case 5: //FLOP
+            case 4: //FLOP
                 for (Player x : jugadores) {
                     makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
                 i = 0;
                 break;
-            case 6: //TURN
-                index = (int) (Math.random() * cartasenbaraja.size());
-                card1 = cartasenbaraja.get(index);
-                card1.setPosicion("Mesa");
-                cartasenbaraja.remove(index);
-                aux = (ImageView) findViewById(R.id.tablecard5);
-                functions.enseñar_carta(aux, card1.getId());
+            case 5: //TURN
                 for (Player x : jugadores) {
-                    x.newCarta(card1);
                     makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
@@ -276,13 +262,13 @@ public class InGame extends AppCompatActivity {
                 auxText.setText("3");
                 i = 0;
                 break;
-            case 7: //TURN
+            case 6: //TURN
                 for (Player x : jugadores) {
                     makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
                 break;
-            case 8: //RIVER
+            case 7: //RIVER
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -299,9 +285,9 @@ public class InGame extends AppCompatActivity {
                 auxText = (TextView) findViewById(R.id.cartasburned);
                 auxText.setText("4");
                 i = 0;
-            case 9: //RIVER
+                break;
+            case 8: //RIVER
                 for (Player x : jugadores) {
-                    x.newCarta(card1);
                     makePlay(playerAction, x, amount_value, current_round);
                 }
                 refreshpoints();
@@ -344,10 +330,13 @@ public class InGame extends AppCompatActivity {
                 }
                 findViewById(R.id.newround).setEnabled(true);
                 findViewById(R.id.newround).setVisibility(View.VISIBLE);
+                break;
             default:
                 functions.imprimirdebug("NON SE PODEN XOGAR MAIS RONDAS,LEVAMOS" + current_round, 2);
 
         }
+        return;
+
     }
 
     public void makePlay(String playerAction, Player player, int amount, int nrondas) {

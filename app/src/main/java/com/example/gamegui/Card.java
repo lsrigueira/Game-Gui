@@ -42,10 +42,6 @@ public class Card {
         return id;
     }
 
-    public String getName() {
-        return this.toString(); //Kept for backwards compatibility
-    }
-
     public String getSuit() {
 
         return suit;
