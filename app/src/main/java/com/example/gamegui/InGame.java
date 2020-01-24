@@ -211,7 +211,7 @@ public class InGame extends AppCompatActivity {
             }
         }
 
-        if(machineAction == 'c' || machineAction == 'r' && playerAction)
+        if(machineAction == 'c' || machineAction == 'r' && playerAction.equals('f'));
 
         switch (current_round) {
             case 1:
