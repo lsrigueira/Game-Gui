@@ -202,7 +202,7 @@ public class InGame extends AppCompatActivity {
         this.current_round++;
         Player maquina = jugadores.get(0);
         Player persona = jugadores.get(1);
-        System.out.println(this.history);
+        //System.out.println(this.history);
         int contador = 0;
         char machineAction = maquina.getdecision(new StringBuilder(this.history));
         if(current_round == 3 || current_round == 5 || current_round == 7){
