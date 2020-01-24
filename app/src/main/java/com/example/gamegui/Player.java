@@ -26,8 +26,8 @@ public class Player {
     static final int CASTTOWORSTCARDINPLAY = 100;
     static final int CASTTOBESTCARDOUTPLAY = 1;
 
-    static final String CALL = "Call";
     static final String FOLD = "Fold";
+    static final String CALL = "Call";
     static final String ALL_IN = "All in!";
     static final String BROKE = "Broke";
 

@@ -44,6 +44,7 @@ public class InGame extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.player1card2)),
                 ((TextView) findViewById(R.id.player1Points))
         );
+        jugador1.setBlind(Player.SMALL_BLIND);
         jugadores.add(jugador1);
 
         final Player persona = new Player("person", 10000,
@@ -51,6 +52,7 @@ public class InGame extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.personcard2)),
                 ((TextView) findViewById(R.id.personPoints))
         );
+        persona.setBlind(Player.BIG_BLIND);
         jugadores.add(persona);
 
         int i = 0;
@@ -63,6 +65,7 @@ public class InGame extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 nuevamano();
+                repartir(null, 0);
             }
         });
 
@@ -104,7 +107,6 @@ public class InGame extends AppCompatActivity {
         this.rondastotales++;
         this.cartasenbaraja = functions.nueva_baraja();
         this.current_round = 0;
-        if (this.rondastotales > 1) this.current_round++;
         findViewById(R.id.newround).setEnabled(false);
         findViewById(R.id.newround).setVisibility(View.INVISIBLE);
 
@@ -177,10 +179,11 @@ public class InGame extends AppCompatActivity {
                 textodeck.setVisibility(View.VISIBLE);
                 findViewById(R.id.cartasendeck).setVisibility(View.VISIBLE);
                 contador = 0;
-                //TODO FLAKIES? :
-                for (Player x : jugadores) {
-                    x.getdecision(current_round);
+                for (Player x : jugadores){
+                    makePlay("call", x, callValue * x.getBlind(), 0);
                 }
+                System.out.println("PASANDO POR AQUÏ");
+                refreshpoints();
                 break;
             case 2: //PREFLOP
                 int i = 0;
@@ -319,7 +322,7 @@ public class InGame extends AppCompatActivity {
                 functions.imprimirdebug("Ha ganado el jugador" + (indexganador + 1) + " con " + jugadores.get(indexganador).getPuntuacion() + " puntos", 0);
                 jugadores.get(indexganador).win(currentPot);
                 setCurrentPot(0);
-                this.callValue = 100;
+                //this.callValue = 100;
                 refreshpoints();
                 if (jugadores.get(jugadores.size() - 1).getMoney() <= 0) {
                     Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
@@ -348,7 +351,8 @@ public class InGame extends AppCompatActivity {
     }
 
     public void makePlay(String playerAction, Player player, int amount, int nrondas) {
-        String action = (player.getname() == "person") ? playerAction : player.getdecision(nrondas);
+
+        String action = (player.getname() == "person" || nrondas == 0) ? playerAction : player.getdecision(nrondas);
         switch (action) {
             case "call":
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
@@ -358,7 +362,6 @@ public class InGame extends AppCompatActivity {
                 int loose_value = (amount >= player.getMoney()) ? player.getMoney() : amount;
                 player.loose(loose_value);
                 addToCurrentPot(amount);
-                callValue = amount;
                 break;
             case "fold":
                 player.setState(Player.FOLD);
