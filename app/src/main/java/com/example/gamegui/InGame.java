@@ -206,6 +206,8 @@ public class InGame extends AppCompatActivity {
         int contador = 0;
         char machineAction = 'r';
         if(current_round != 1){
+            this.history += playerAction.charAt(0);
+            machineAction = maquina.getdecision(new StringBuilder(this.history));
         }
 
         switch(current_round) {
@@ -225,8 +227,6 @@ public class InGame extends AppCompatActivity {
                     this.current_round++;
                 }
                 else if(playerAction.equals("c")){
-                    this.history += 'r';
-                    machineAction = maquina.getdecision(new StringBuilder(this.history));
                     if(machineAction == 'f'){
                         maquina.stop_playing();
                         current_round = 8;
