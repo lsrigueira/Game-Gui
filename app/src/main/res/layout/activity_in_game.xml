@@ -333,4 +333,28 @@
         app:layout_constraintStart_toEndOf="@+id/deck"
         app:layout_constraintTop_toBottomOf="@+id/potLabel" />
 
+    <TextView
+        android:id="@+id/noBetText"
+        android:layout_width="83dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/foldButton"
+        app:layout_constraintEnd_toStartOf="@+id/betText"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/personcard2" />
+
+    <TextView
+        android:id="@+id/betText"
+        android:layout_width="81dp"
+        android:layout_height="19dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/betbutton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

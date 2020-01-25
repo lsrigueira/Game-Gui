@@ -237,8 +237,8 @@ public class functions {
     public static void play(Context a, String cancion){
         try{
             mp.stop();
-        }catch (Exception e){System.out.println("Non habia muscai inicializada");}
-
+        }catch (Exception e){System.out.println("Non habia musca inicializada");}
+        if(functions.permitirmusica == 1);
         switch (cancion){
             case "eye_of_the_tiger":
                 mp = MediaPlayer.create(a,R.raw.eye_of_the_tiger);

@@ -33,6 +33,7 @@ public class InGame extends AppCompatActivity {
     static long tiempoEjecucion = 0;
     static long vecesEjecucion = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         InputStream ins = getResources().openRawResource(R.raw.test);
@@ -193,6 +194,8 @@ public class InGame extends AppCompatActivity {
     }
     String history = "rr";
     public void repartir(String playerAction, int amount_value) {
+        TextView noBetText = ((TextView) findViewById(R.id.noBetText));
+        TextView betText = ((TextView) findViewById(R.id.betText));
         this.current_round++;
         Player maquina = jugadores.get(0);
         Player persona = jugadores.get(1);
@@ -206,19 +209,28 @@ public class InGame extends AppCompatActivity {
 
         switch(current_round) {
             case 1:
+                noBetText.setText("Fold");
+                betText.setText("Bet 100");
                 break;
             case 2:
+            case 4:
+            case 6:
+            case 8:
+                machineAction = 'c';
                 if(playerAction.equals("f")){
                     persona.stop_playing();
                     current_round = 8;
-                    machineAction = 'c';
                 }
+                noBetText.setText("Check");
+                betText.setText("Raise");
                 break;
             case 3:
             case 5:
             case 7:
                 if(playerAction.charAt(0) == machineAction){
                     this.current_round++;
+                    noBetText.setText("Check");
+                    betText.setText("Raise");
                 }
                 else if(playerAction.equals("c")){
                     if(machineAction == 'f'){
@@ -226,27 +238,21 @@ public class InGame extends AppCompatActivity {
                         current_round = 8;
                     }
                     if(machineAction == 'r'){
-
+                        noBetText.setText("Fold");
+                        betText.setText("Call");
                     }
                 } else if(playerAction.equals("f")){
                     if(machineAction == 'c'){
                         this.current_round++;
+                        noBetText.setText("Check");
+                        betText.setText("Raise");
                     }
                     if(machineAction == 'r'){
-
+                        noBetText.setText("Fold");
+                        betText.setText("Call");
                     }
                 }
                 break;
-            case 4:
-            case 6:
-            case 8:
-                if(playerAction.equals("c")){
-
-                }
-                else if(playerAction.equals("f")){
-                    persona.stop_playing();
-                    current_round = 8;
-            }
         }
 
 
@@ -308,7 +314,6 @@ public class InGame extends AppCompatActivity {
                     x.newCarta(card1);
                 }
                 makePlay(playerAction.charAt(0), persona, amount_value, current_round);
-                makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 TextView auxText = (TextView) findViewById(R.id.cartasendeck);
                 auxText.setText(Integer.toString(cartasenbaraja.size()));
