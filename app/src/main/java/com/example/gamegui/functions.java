@@ -1,5 +1,8 @@
 package com.example.gamegui;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -7,6 +10,9 @@ import java.util.ArrayList;
 
 
 public class functions {
+
+    public static MediaPlayer mp;
+    public static int permitirmusica;
 
     static int DEBUGLEVEL = 1;
 
@@ -227,6 +233,31 @@ public class functions {
         jugadores.get(indexganador).win(totalmoneybet);
     }
 
+
+    public static void play(Context a, String cancion){
+        try{
+            mp.stop();
+        }catch (Exception e){System.out.println("Non habia muscai inicializada");}
+
+        switch (cancion){
+            case "eye_of_the_tiger":
+                mp = MediaPlayer.create(a,R.raw.eye_of_the_tiger);
+                mp.start();
+                break;
+            case "perdiste":
+                System.out.println("AQUIAQUI");
+                mp = MediaPlayer.create(a,R.raw.perdiste);
+                mp.start();;
+                break;
+             default:
+                System.out.println("AQUIAQUI");
+                mp = MediaPlayer.create(a,R.raw.perdiste);
+                mp.start();;
+                break;
+
+        }
+
+    }
 
     public static void enseñar_carta(Player x) {
         /*switch (x.getname()){

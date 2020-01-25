@@ -3,22 +3,15 @@ package com.example.gamegui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import android.content.Context;
-import android.content.Intent;
-import android.icu.text.Edits;
-import android.os.AsyncTask;
+
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.SeekBar;
 import android.widget.Toast;
 import java.io.*;
 import java.util.ArrayList;
@@ -44,6 +37,7 @@ public class InGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         InputStream ins = getResources().openRawResource(R.raw.test);
         InputStreamReader inputStreamReader = new InputStreamReader(ins);
+        functions.play(this,"eye_of_the_tiger");
         String line;
         try {
 
@@ -410,9 +404,14 @@ public class InGame extends AppCompatActivity {
                     Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
                     finish();
                 }
-                Toast result = (jugadores.get(indexganador).getname() == "person") ?
-                        Toast.makeText(this.getBaseContext(), "You win, congrats!", Toast.LENGTH_SHORT) :
-                        Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
+                Toast result;
+
+                if( jugadores.get(indexganador).getname().equals("person")) {
+                    result = Toast.makeText(this.getBaseContext(), "You win, congrats!", Toast.LENGTH_SHORT);
+                }else{
+                    functions.play(this,"perdiste");
+                    result = Toast.makeText(this.getBaseContext(), "You lost!", Toast.LENGTH_SHORT);
+                }
                 result.show();
                 for (i = 0; i < jugadores.size(); i++) {
                     Player player = jugadores.get(i);
