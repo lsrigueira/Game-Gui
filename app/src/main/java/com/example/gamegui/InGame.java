@@ -128,7 +128,7 @@ public class InGame extends AppCompatActivity {
         betbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("r", callValue);
+                repartir("c", callValue);
             }
         });
 
@@ -136,7 +136,7 @@ public class InGame extends AppCompatActivity {
         foldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repartir("c", 0);
+                repartir("f", 0);
             }
         });
     }
@@ -204,14 +204,58 @@ public class InGame extends AppCompatActivity {
         Player persona = jugadores.get(1);
         //System.out.println(this.history);
         int contador = 0;
-        char machineAction = maquina.getdecision(new StringBuilder(this.history));
-        if(current_round == 3 || current_round == 5 || current_round == 7){
-            if(playerAction.charAt(0) == machineAction){
-                this.current_round++;
+        char machineAction = 'r';
+        if(current_round != 1){
+        }
+
+        switch(current_round) {
+            case 1:
+                break;
+            case 2:
+                if(playerAction.equals("f")){
+                    persona.stop_playing();
+                    current_round = 8;
+                    machineAction = 'c';
+                }
+                break;
+            case 3:
+            case 5:
+            case 7:
+                if(playerAction.charAt(0) == machineAction){
+                    this.current_round++;
+                }
+                else if(playerAction.equals("c")){
+                    this.history += 'r';
+                    machineAction = maquina.getdecision(new StringBuilder(this.history));
+                    if(machineAction == 'f'){
+                        maquina.stop_playing();
+                        current_round = 8;
+                    }
+                    if(machineAction == 'r'){
+
+                    }
+                } else if(playerAction.equals("f")){
+                    if(machineAction == 'c'){
+                        this.current_round++;
+                    }
+                    if(machineAction == 'r'){
+
+                    }
+                }
+                break;
+            case 4:
+            case 6:
+            case 8:
+                if(playerAction.equals("c")){
+
+                }
+                else if(playerAction.equals("f")){
+                    persona.stop_playing();
+                    current_round = 8;
             }
         }
 
-        if(machineAction == 'c' || machineAction == 'r' && playerAction.equals('f'));
+
 
         switch (current_round) {
             case 1:
@@ -392,7 +436,6 @@ public class InGame extends AppCompatActivity {
 
     public void makePlay(char action, Player player, int amount, int nrondas) {
 
-    this.history += action;
         switch (action) {
             case 'c':
                 if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
