@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import android.media.MediaPlayer;
+import android.net.http.SslCertificate;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -273,7 +274,8 @@ public class InGame extends AppCompatActivity {
                 if(playerAction.equals("c")){
                     this.history += "r";
                     machineAction = maquina.getdecision(new StringBuilder(this.history));
-                    if(machineAction == 'f'){
+                    if(machineAction == 'f' || machineAction == 'F' ){
+                        this.history+='f';
                         maquina.stop_playing();
                         current_round = 8;
                     }
@@ -297,10 +299,8 @@ public class InGame extends AppCompatActivity {
                         noBetText.setText("Check");
                         betText.setText("Raise");
                     }
-
                 }
                 break;
-
         }
 
         System.out.println("HITORICO ACTUAL TOTAL###"+this.history);
@@ -452,15 +452,17 @@ public class InGame extends AppCompatActivity {
                 //int indexganador = Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
 
                 int indexganador=123;
-                int puntosmaximos = 0;
+                long puntosmaximos = 0;
                 for(int xx=0;xx<jugadores.size();xx++){
-                    if(jugadores.get(xx).is_playing() && jugadores.get(xx).getPuntuacion() >puntosmaximos ){
+                    if(jugadores.get(xx).is_playing() && jugadores.get(xx).getPuntuacion() >=puntosmaximos ){
+                        puntosmaximos =jugadores.get(xx).getPuntuacion();
                         indexganador = xx;
                     }
                 }
+                System.out.println("######"+indexganador);
                 tiempoEjecucion += System.nanoTime() - startTime;
                 vecesEjecucion++;
-                functions.imprimirdebug("Tiempo medio de ejecucion = " + tiempoEjecucion / vecesEjecucion / 1000 + "ns", 1);
+                //functions.imprimirdebug("Tiempo medio de ejecucion = " + tiempoEjecucion / vecesEjecucion / 1000 + "ns", 1);
 
                 functions.imprimirdebug("Ha ganado el jugador" + (indexganador + 1) + " con " + jugadores.get(indexganador).getPuntuacion() + " puntos", 0);
                 jugadores.get(indexganador).win(currentPot);
