@@ -55,8 +55,9 @@ public class InGame extends AppCompatActivity {
                     String[] parts2 = value.split(",");
                     node.strategySum[0] = Double.parseDouble(parts2[0]);
                     node.strategySum[1] = Double.parseDouble(parts2[1]);
-                    node.strategySum[2] = Double.parseDouble(parts2[2]);
-                    node.strategySum[3] = Double.parseDouble(parts2[3].split(Pattern.quote("]"))[0]);
+                    node.strategySum[2] = Double.parseDouble(parts2[2].split(Pattern.quote("]"))[0]);
+                    //node.strategySum[2] = Double.parseDouble(parts2[2]);
+                    //node.strategySum[3] = Double.parseDouble(parts2[3].split(Pattern.quote("]"))[0]);
                     nodeMap.put(key, node);
                 } else {
                     System.out.println("ignoring line: " + line);

@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player {
     private static final int PAIR = 1;
@@ -91,8 +92,11 @@ public class Player {
             this.playing = false;
             return "fold";
         }*/
-        final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
-        StringBuilder infoset = history.length() > 6 ? new StringBuilder(history.substring(history.length() - 5))
+        //final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
+        //StringBuilder infoset = history.length() > 6 ? new StringBuilder(history.substring(history.length() - 5))
+        //final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;final int HLENGTH = 5;
+        final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;final int HLENGTH = 7;
+        StringBuilder infoset = history.length() > (HLENGTH - 1) ? new StringBuilder(history.substring(history.length() - HLENGTH))
                 : new StringBuilder(history);
         infoset.append(":");
         infoset.append(calcularpuntuacion());
@@ -107,7 +111,8 @@ public class Player {
             if (index < strategy[0]) {
                 if (isValidPlay(nextHistory, FOLD1)) {
                     nextHistory.append(FOLD1);
-                    System.out.println("Jugador IA jugó fold: " + infoset);
+                    //System.out.println("Jugador IA jugó fold: " + infoset);
+                    System.out.println("Jugador IA jugó fold: " + infoset + "::" + Arrays.toString(strategy));
                     return FOLD1;
                     //a = 0;
                     //System.out.println("Jugador " + player + " jugó fold: " + history + "---------" + cards[player][0]
@@ -116,7 +121,8 @@ public class Player {
             } else if (index < strategy[0] + strategy[1]) {
                 if (isValidPlay(nextHistory, RAISE1)) {
                     nextHistory.append(RAISE1);
-                    System.out.println("Jugador IA jugó raise: " + infoset);
+                    System.out.println("Jugador IA jugó raise: " + infoset + "::" + Arrays.toString(strategy));
+                    //System.out.println("Jugador IA jugó raise: " + infoset);
                     return RAISE1;
                     //a = 1;
                     //System.out.println("Jugador " + player + " jugó raise: " + history + "---------" + cards[player][0]
@@ -125,7 +131,8 @@ public class Player {
             } else {
                 if (isValidPlay(nextHistory, CALL1)) {
                     nextHistory.append(CALL1);
-                    System.out.println("Jugador IA jugó call: " + infoset);
+                    System.out.println("Jugador IA jugó call: " + infoset + "::" + Arrays.toString(strategy));
+                    //System.out.println("Jugador IA jugó call: " + infoset);
                     return CALL1;
                     //a = 2;
                     // System.out.println("Jugador " + player + " jugó call: " + history + "---------" + cards[player][0]
@@ -225,13 +232,16 @@ public class Player {
         StringBuilder history = new StringBuilder(history_);
         switch (play) {
             case FOLD1:
-                return true;
+                if ( history.charAt(history.length() - 1) == RAISE1)
+                    return true;
+                return false;
             case RAISE1:
                 //if (limitReached(new StringBuilder(history).append(RAISE), (history.length()) % 2, LIMIT))// De esta manera
                 //return false;																				// evitamos el
                 // re-raise
                 // infinito
-                if (history.charAt(history.length() - 2) == RAISE1 || history.charAt(history.length() - 1) == RAISE1)
+                //if (history.charAt(history.length() - 2) == RAISE1 || history.charAt(history.length() - 1) == RAISE1)
+                if ( history.charAt(history.length() - 1) == RAISE1)
                     return false;
                 return true;
             case CALL1:
