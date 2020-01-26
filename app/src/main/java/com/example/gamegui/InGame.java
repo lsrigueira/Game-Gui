@@ -36,7 +36,7 @@ public class InGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        InputStream ins = getResources().openRawResource(R.raw.test);
+        InputStream ins = getResources().openRawResource(R.raw.it1005l);
         InputStreamReader inputStreamReader = new InputStreamReader(ins);
         functions.play(this,"eye_of_the_tiger");
         String line;
@@ -54,8 +54,8 @@ public class InGame extends AppCompatActivity {
                     String[] parts2 = value.split(",");
                     node.strategySum[0] = Double.parseDouble(parts2[0]);
                     node.strategySum[1] = Double.parseDouble(parts2[1]);
-                    node.strategySum[2] = Double.parseDouble(parts2[2]);
-                    node.strategySum[3] = Double.parseDouble(parts2[3].split(Pattern.quote("]"))[0]);
+                   // node.strategySum[2] = Double.parseDouble(parts2[2]);
+                    node.strategySum[2] = Double.parseDouble(parts2[2].split(Pattern.quote("]"))[0]);
                     nodeMap.put(key, node);
                 } else {
                     System.out.println("ignoring line: " + line);
