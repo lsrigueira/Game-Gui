@@ -274,7 +274,7 @@ public class InGame extends AppCompatActivity {
                     this.history += "r";
                     machineAction = maquina.getdecision(new StringBuilder(this.history));
                     if(machineAction == 'f'){
-                        //maquina.stop_playing();
+                        maquina.stop_playing();
                         current_round = 8;
                     }
                     else{//Non pode xogar raise
