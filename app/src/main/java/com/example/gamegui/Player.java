@@ -92,7 +92,7 @@ public class Player {
             return "fold";
         }*/
         final char FOLD1 = 'f', RAISE1 = 'r', CALL1 = 'c', NUM_ACTIONS = 3;
-        StringBuilder infoset = history.length() > 4 ? new StringBuilder(history.substring(history.length() - 5))
+        StringBuilder infoset = history.length() > 6 ? new StringBuilder(history.substring(history.length() - 5))
                 : new StringBuilder(history);
         infoset.append(":");
         infoset.append(calcularpuntuacion());
@@ -479,8 +479,8 @@ public class Player {
         cartasTotales.addAll(cartastot);
         cartasMesa.addAll(cartasmesa);
 
-        System.out.println(this.getname() + "Cartas TOTALES = " + cartasTotales.toString());
-        System.out.println(this.getname() + "Cartas MESA = " + cartasMesa.toString());
+        /*System.out.println(this.getname() + "Cartas TOTALES = " + cartasTotales.toString());
+        System.out.println(this.getname() + "Cartas MESA = " + cartasMesa.toString());*/
 
         int puntosjugador = calcularPuntos(cartasTotales, "TOTAL");
         int puntuacionmesa = calcularPuntos(cartasMesa, "MESA");
@@ -488,6 +488,7 @@ public class Player {
         functions.imprimirdebug(this.getname() + ":PUNTOS MAN = " + puntosjugador + " PUNTOS MESA = "
                 + puntuacionmesa+ " PUNTOS RESULTANTES = " + (puntosjugador - puntuacionmesa), 1);
 
+        this.puntuacion =(puntosjugador - puntuacionmesa);
         return (puntosjugador - puntuacionmesa);
     }
 

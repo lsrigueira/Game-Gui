@@ -238,24 +238,26 @@ public class functions {
         try{
             mp.stop();
         }catch (Exception e){System.out.println("Non habia musca inicializada");}
-        if(functions.permitirmusica == 1);
-        switch (cancion){
-            case "eye_of_the_tiger":
-                mp = MediaPlayer.create(a,R.raw.eye_of_the_tiger);
-                mp.start();
-                break;
-            case "perdiste":
-                System.out.println("AQUIAQUI");
-                mp = MediaPlayer.create(a,R.raw.perdiste);
-                mp.start();;
-                break;
-             default:
-                System.out.println("AQUIAQUI");
-                mp = MediaPlayer.create(a,R.raw.perdiste);
-                mp.start();;
-                break;
+        if(functions.permitirmusica == 1){
+            switch (cancion){
+                case "eye_of_the_tiger":
+                    mp = MediaPlayer.create(a,R.raw.eye_of_the_tiger);
+                    mp.start();
+                    break;
+                case "perdiste":
+                    System.out.println("AQUIAQUI");
+                    mp = MediaPlayer.create(a,R.raw.perdiste);
+                    mp.start();;
+                    break;
+                default:
+                    System.out.println("AQUIAQUI");
+                    mp = MediaPlayer.create(a,R.raw.perdiste);
+                    mp.start();;
+                    break;
 
+            }
         }
+
 
     }
 

@@ -135,7 +135,7 @@ public class InGame extends AppCompatActivity {
             }
         });
     }
-
+    String history = "rr";
 
     public void nuevamano() {
         this.rondastotales++;
@@ -192,20 +192,24 @@ public class InGame extends AppCompatActivity {
             player.getTextPuntos().setText(Integer.toString(player.getMoney()));
         }
     }
-    String history = "rr";
+
     public void repartir(String playerAction, int amount_value) {
         TextView noBetText = ((TextView) findViewById(R.id.noBetText));
         TextView betText = ((TextView) findViewById(R.id.betText));
         this.current_round++;
+        System.out.println("RAPRTIR--->RONDA"+this.current_round);
         Player maquina = jugadores.get(0);
         Player persona = jugadores.get(1);
         //System.out.println(this.history);
         int contador = 0;
         char machineAction = 'r';
-        if(current_round != 1){
+        if(current_round==1){
+            this.history = "rr";
+        }
+        /*if(current_round != 1){
             this.history += playerAction.charAt(0);
             machineAction = maquina.getdecision(new StringBuilder(this.history));
-        }
+        }*/
 
         switch(current_round) {
             case 1:
@@ -213,10 +217,8 @@ public class InGame extends AppCompatActivity {
                 betText.setText("Bet 100");
                 break;
             case 2:
-            case 4:
-            case 6:
-            case 8:
-                machineAction = 'c';
+                //1 C to call, the other to help Jesus IA
+                this.history = this.history+"cc";
                 if(playerAction.equals("f")){
                     persona.stop_playing();
                     current_round = 8;
@@ -224,10 +226,23 @@ public class InGame extends AppCompatActivity {
                 noBetText.setText("Check");
                 betText.setText("Raise");
                 break;
+
+            case 4:
+            case 6:
+            case 8:
+                if(playerAction.equals("f")){
+                    persona.stop_playing();
+                    current_round = 8;
+                }else{
+                    this.history+="cc";//PARA JESUS IA
+                }
+                noBetText.setText("Check");
+                betText.setText("Raise");
+                break;
             case 3:
             case 5:
             case 7:
-                if(playerAction.charAt(0) == machineAction){
+                /*if(playerAction.charAt(0) == machineAction){
                     this.current_round++;
                     noBetText.setText("Check");
                     betText.setText("Raise");
@@ -251,14 +266,48 @@ public class InGame extends AppCompatActivity {
                         noBetText.setText("Fold");
                         betText.setText("Call");
                     }
+                }*/
+
+                //C means "Raise" here
+                //F means "Call" here
+                if(playerAction.equals("c")){
+                    this.history += "r";
+                    machineAction = maquina.getdecision(new StringBuilder(this.history));
+                    if(machineAction == 'f'){
+                        maquina.stop_playing();
+                        current_round = 8;
+                    }
+                    else{//Non pode xogar raise
+                        this.current_round++;
+                        this.history=this.history+"c";
+                        noBetText.setText("Check");
+                        betText.setText("Raise");
+                    }
+                } else if(playerAction.equals("f")) {
+                    this.history += "c";
+                    machineAction = maquina.getdecision(new StringBuilder(this.history));
+                    if (machineAction == 'r' ) {
+                        this.history+="r";
+                        noBetText.setText("Fold");
+                        betText.setText("Call");
+                    }
+                    if (machineAction == 'c' ) {
+                        this.history+="c";
+                        this.current_round++;
+                        noBetText.setText("Check");
+                        betText.setText("Raise");
+                    }
+
                 }
                 break;
+
         }
 
-
+        System.out.println("HITORICO ACTUAL TOTAL###"+this.history);
 
         switch (current_round) {
             case 1:
+                System.out.println("ESTAMOS NA COSE---1");
                 refreshpoints();
                 findViewById(R.id.player1Points).setVisibility(View.VISIBLE);
                 findViewById(R.id.player2Points).setVisibility(View.VISIBLE);
@@ -273,11 +322,11 @@ public class InGame extends AppCompatActivity {
                 contador = 0;
                 for (Player x : jugadores){
                     makePlay('c', x, 50 * x.getBlind(), 0);
-
                 }
                 refreshpoints();
                 break;
             case 2: //PREFLOP
+                System.out.println("ESTAMOS NA COSE---2");
                 int index = (int) (Math.random() * cartasenbaraja.size());
                 Card card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -323,12 +372,14 @@ public class InGame extends AppCompatActivity {
                 break;
 
             case 3: //FLOP
+                System.out.println("ESTAMOS NA COSE---3");
                 makePlay(playerAction.charAt(0), persona, amount_value, current_round);
                 makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
                 i = 0;
                 break;
             case 4: //FLOP
+                System.out.println("ESTAMOS NA COSE---4");
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -348,6 +399,7 @@ public class InGame extends AppCompatActivity {
                 i = 0;
                 break;
             case 5: //TURN
+                System.out.println("ESTAMOS NA COSE---5");
                 makePlay(playerAction.charAt(0), persona, amount_value, current_round);
                 makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
@@ -358,6 +410,7 @@ public class InGame extends AppCompatActivity {
                 i = 0;
                 break;
             case 6: //TURN
+                System.out.println("ESTAMOS NA COSE---6");
                 index = (int) (Math.random() * cartasenbaraja.size());
                 card1 = cartasenbaraja.get(index);
                 card1.setPosicion("Mesa");
@@ -377,12 +430,14 @@ public class InGame extends AppCompatActivity {
                 i = 0;
                 break;
             case 7: //RIVER
+                System.out.println("ESTAMOS NA COSE---7");
                 makePlay(playerAction.charAt(0), persona, amount_value, current_round);
                 makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
 
                 break;
             case 8: //RIVER
+                System.out.println("ESTAMOS NA COSE---8");
                 makePlay(playerAction.charAt(0), persona, amount_value, current_round);
                 makePlay(machineAction, maquina, amount_value, current_round);
                 refreshpoints();
@@ -393,9 +448,16 @@ public class InGame extends AppCompatActivity {
                     puntuaciones[contador] = (jugadores.get(contador).getState() != Player.FOLD) ?
                             jugadores.get(contador).calcularpuntuacion() : -1;
                 }
-                int indexganador = Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
 
+                //int indexganador = Arrays.asList(puntuaciones).indexOf(functions.maximo(puntuaciones));
 
+                int indexganador=123;
+                int puntosmaximos = 0;
+                for(int xx=0;xx<jugadores.size();xx++){
+                    if(jugadores.get(xx).is_playing() && jugadores.get(xx).getPuntuacion() >puntosmaximos ){
+                        indexganador = xx;
+                    }
+                }
                 tiempoEjecucion += System.nanoTime() - startTime;
                 vecesEjecucion++;
                 functions.imprimirdebug("Tiempo medio de ejecucion = " + tiempoEjecucion / vecesEjecucion / 1000 + "ns", 1);
@@ -440,20 +502,14 @@ public class InGame extends AppCompatActivity {
 
     public void makePlay(char action, Player player, int amount, int nrondas) {
 
-        switch (action) {
-            case 'c':
-                if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
-                if (amount >= player.getMoney()) {
-                    player.setState(Player.ALL_IN);
-                }
-                int loose_value = (amount >= player.getMoney()) ? player.getMoney() : amount;
-                player.loose(loose_value);
-                addToCurrentPot(amount);
-                break;
-            case 'f':
-                player.setState(Player.FOLD);
-                player.stop_playing();
+        if (player.getState() == Player.ALL_IN || player.getState() == Player.FOLD) return;
+        if (amount >= player.getMoney()) {
+            player.setState(Player.ALL_IN);
         }
+        int loose_value = (amount >= player.getMoney()) ? player.getMoney() : amount;
+        player.loose(loose_value);
+        addToCurrentPot(amount);
+
     }
 
     public static Node gisnoc(StringBuilder infoSet) {
