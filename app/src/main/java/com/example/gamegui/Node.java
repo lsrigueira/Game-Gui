@@ -3,7 +3,7 @@ package com.example.gamegui;
 import java.util.Arrays;
 
 public class Node {
-    public static final char FOLD = 'f', RAISE = 'r', CALL = 'c', DOUBLE = 'h', NUM_ACTIONS = 4;
+    public static final char FOLD = 'f', RAISE = 'r', CALL = 'c', DOUBLE = 'h', NUM_ACTIONS = 3;
     StringBuilder infoSet;
     double[] regretSum = new double[NUM_ACTIONS], strategy = new double[NUM_ACTIONS],
             strategySum = new double[NUM_ACTIONS];
